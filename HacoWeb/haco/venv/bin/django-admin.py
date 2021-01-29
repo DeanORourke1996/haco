@@ -1,4 +1,4 @@
-#!/Users/dean/PycharmProjects/haco/venv/bin/python
+#!/Users/dean/haco/HacoWeb/haco/venv/bin/python
 # When the django-admin.py deprecation ends, remove this script.
 import warnings
 
