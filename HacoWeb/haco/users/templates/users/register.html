@@ -1,10 +1,10 @@
 {% extends 'users/core.html' %}
 
-<body>
-    {% block content %}
-        <form method="POST">
-            {% csrf_token %}
-            {{ form }}
-        </form>
-    {% endblock %}
-</body>
+{% block title %}Sign Up for Haco{% endblock %}
+
+{% block content %}
+    <form method="POST">
+        {% csrf_token %}
+        {{ form }}
+    </form>
+{% endblock %}
