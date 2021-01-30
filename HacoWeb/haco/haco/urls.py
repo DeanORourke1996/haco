@@ -15,7 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from users import views as users
+from hacoweb import views as hacoweb
+from users import views as user_views
+from django.views.generic import TemplateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('register/', user_views.register, name='register'),
+    path('', hacoweb.home, name='home'),
 ]
