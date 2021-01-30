@@ -23,5 +23,5 @@ from django.views.generic import TemplateView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('register/', user_views.register, name='register'),
-    path('', hacoweb.home, name='home'),
+    path('home/', hacoweb.home, name='home'),
 ]

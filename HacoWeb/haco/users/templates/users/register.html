@@ -1,10 +1,31 @@
 {% extends 'users/core.html' %}
+{% load static %}
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
 
 {% block title %}Sign Up for Haco{% endblock %}
 
 {% block content %}
-    <form method="POST">
-        {% csrf_token %}
-        {{ form }}
-    </form>
+    <div class="container-fluid">
+        <div class="content-section">
+            <!-- Registration form provided by forms.py -->
+            <form method="POST">
+                {% csrf_token %}
+                <fieldset class="form-group">
+                    <legend class="border-bottom mb-4">Join the Haco Community today</legend>
+                    {{ form|crispy }}
+                </fieldset>
+
+                <div class="form-group">
+                    <button class="btn btn-outline-info" type="submit">Sign Up</button>
+                </div>
+            </form>
+            <!-- Login link instead -->
+            <div class="border-top pt-4">
+                <small class="text-muted">
+                    Already a Haco  member? <a href="#" class="ml-2">Login Instead</a>
+                </small>
+            </div>
+        </div>
+    </div>
 {% endblock %}
