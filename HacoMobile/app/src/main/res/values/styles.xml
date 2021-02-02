@@ -7,9 +7,4 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <!-- Splash Activity Screen upon launching the application -->
-    <style name="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowBackground">@drawable/splash</item>
-    </style>
-
 </resources>
