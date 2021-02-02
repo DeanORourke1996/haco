@@ -3,10 +3,8 @@ package com.example.haco.activities
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.haco.R
 import com.example.haco.databinding.ActivityMainBinding
 import com.example.haco.helpers.AmbeeAPIClient
-import kotlinx.parcelize.Parcelize
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -15,6 +13,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        initMapData()
 
 
         /******************************************
