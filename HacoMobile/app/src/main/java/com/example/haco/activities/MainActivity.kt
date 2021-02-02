@@ -3,35 +3,47 @@ package com.example.haco.activities
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import com.example.haco.R
-import kotlinx.android.synthetic.main.activity_main.*
+import com.example.haco.databinding.ActivityMainBinding
+import com.example.haco.helpers.AmbeeAPIClient
+import kotlinx.parcelize.Parcelize
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
+
+        /******************************************
+        **  EVENT LISTENERS FOR SWITICHING CONTEXTS
+         ******************************************/
         // Login Intent
-        btn_nav_login.setOnClickListener {
+        binding.btnNavLogin.setOnClickListener() {
             val intent = Intent(this, Login::class.java)
             startActivity(intent)
         }
 
         // Register Intent
-        btn_nav_profile.setOnClickListener {
+        binding.btnNavProfile.setOnClickListener() {
             val intent = Intent(this, Profile::class.java)
             startActivity(intent)
         }
+
+        // Profile Intent
+        binding.btnNavProfile.setOnClickListener() {
+            val intent = Intent(this, ReportTool::class.java)
+            startActivity(intent)
+        }
+
+        // more intents to come...
     }
 
 
-
-    /*private fun simulateHeavyLayout() {
-        // simulate some heavy UI inflation
-        for(i in 0..1000000){
-            val d = tan(atan(tan(atan(tan(atan(tan(atan(tan(kotlin.math.atan(123456789.123456789))))))))))
-            d.toString()
-        }
-    }*/
+    private fun initMapData() {
+        val api = AmbeeAPIClient
+        api.callAmbee()
+    }
 }
