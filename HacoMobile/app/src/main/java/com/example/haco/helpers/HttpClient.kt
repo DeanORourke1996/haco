@@ -1,4 +1,4 @@
-package com.example.haco
+package com.example.haco.helpers
 
 import com.loopj.android.http.AsyncHttpClient
 import com.loopj.android.http.AsyncHttpResponseHandler
