@@ -12,7 +12,10 @@ def register(response):
             username = form.cleaned_data.get('username')
             email = form.cleaned_data.get('email')
             password = form.cleaned_data.get('password1')
+            first_name = form.cleaned_data.get('first_name')
+            last_name = form.cleaned_data.get('last_name')
             messages.success(response, f'Account created for {username}')
+            form.save()
             return redirect('home')
     else:
         form = RegistrationForm()
