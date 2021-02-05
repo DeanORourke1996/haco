@@ -5,30 +5,24 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 # Create your models here.
 class UserManagement(BaseUserManager):
 
-    def create_user(self, email, username, password, *args, **kwargs):
+    def create_user(self, email, username, password):
         if not email:
             raise ValueError("Email address is required")
         if not username:
             raise ValueError("Username is required")
-        if kwargs.__contains__("first_name"):
-            first_name = kwargs.get('first_name')
-        if kwargs.__contains__("last_name"):
-            last_name = kwargs.get("last_name")
 
         user = self.model(
             email=self.normalize_email(email),
             username=username,
-            password=password,
-            first_name=kwargs.get('first_name'),
-            last_name=kwargs.get('last_name'),
+            password=password
         )
 
         user.set_password(password)
-        user.save(user=self._db)
+        user.save(using=self._db)
         return user
 
     def create_superuser(self, email, username, password):
-        user = self.model(
+        user = self.create_user(
             email=self.normalize_email(email),
             username=username,
             password=password
@@ -66,7 +60,8 @@ class User(AbstractBaseUser):
     def has_perm(self, perm, obj=None):
         return self.is_admin
 
-    def has_module_perms(self, app_label):
+    @staticmethod
+    def has_module_perms(app_label):
         return True
 
 
