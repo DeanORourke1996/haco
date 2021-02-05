@@ -1,5 +1,6 @@
 from django.contrib.auth.forms import forms
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import authenticate
 from users.models import User
 
 
@@ -18,10 +19,18 @@ class RegistrationForm(UserCreationForm):
 
 
 # Login with Haco
-class LoginForm(UserCreationForm):
-    username = forms.CharField()
-    password = forms.CharField()
+class LoginForm(forms.ModelForm):
+    # Attributes
+    username = forms.CharField(label='Username')
+    password = forms.CharField(label='Password', widget=forms.PasswordInput())
 
+    # Base method
     class Meta:
         model = User
         fields = ["username", "password"]
+
+    def clean(self):
+        username = self.cleaned_data['username']
+        password = self.cleaned_data['password']
+        if not authenticate(username=username, password=password):
+            raise forms.ValidationError("Invalid login")

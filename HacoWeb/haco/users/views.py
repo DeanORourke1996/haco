@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from users.forms import RegistrationForm
+from users.forms import RegistrationForm, LoginForm
 from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate
 
@@ -27,7 +27,27 @@ def user_register(response):
 
 # Login view
 def user_login(response):
-    pass
+
+    user = response.user
+
+    if user.is_authenticated:
+        return redirect('home')
+
+    if response.method == 'POST':
+        form = LoginForm(response.POST)
+        if form.is_valid():
+            username = response.POST['username']
+            password = response.POST['password']
+            user = authenticate(username=username, password=password)
+
+            if user:
+                login(response, user)
+                return redirect('home')
+
+    else:
+        form = LoginForm()
+
+    return render(response, 'users/login.html', {'form': form})
 
 
 # Logout view
