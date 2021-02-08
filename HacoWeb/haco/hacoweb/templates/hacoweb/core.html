@@ -1,4 +1,6 @@
 <!-- Core script for main website application to extend from -->
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,7 +12,7 @@
 </head>
 <body>
     <!-- Included with all scripts which extend from core script -->
-    <ul class="nav flex-column">
+    <ul class="nav flex-column haco-nav">
         <li class="nav-item">
             <a href="#" class="nav-link active">Home</a>
         </li>
@@ -35,6 +37,11 @@
 
     {% block content %}
     {% endblock %}
+
+
+    <footer class="card-footer">
+        <p>Haco | 2021</p>
+    </footer>
 
     <!-- JS, PopperJS CDNs -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
