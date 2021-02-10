@@ -1,32 +1,68 @@
-<!-- Core script for main website application to extend from -->
 {% load static %}
+{% load i18n %}
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
 
+<!-- Core HTML document for users application -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}{% endblock %}</title>
+    <title>{% block title %}{% endblock%}</title>
 
     <!-- Bootstrap4 CDN -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <link rel="stylesheet" href="{% static "hacoweb/style.css" %}" type="text/css" media="screen">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'hacoweb/style.css' %}" type="text/css" media="screen">
+
+    <!-- JS, PopperJS, jQuery -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </head>
 <body>
     <!-- Included with all scripts which extend from core script -->
-    <ul class="nav flex-column haco-nav">
-        <li class="nav-item">
-            <a href="#" class="nav-link active">Home</a>
-        </li>
-        <li class="nav-item">
-            <a href="#" class="nav-link">Wildfire</a>
-        </li>
-        <li class="nav-item">
-            <a href="#" class="nav-link">About Haco</a>
-        </li>
-        <li class="nav-item">
-            <a href="#" class="nav-link">How to use Haco</a>
-        </li>
-    </ul>
+    <nav class="navbar navbar-expand-lg haco-main">
+        <a class="navbar-brand haco-title" href="{% url 'home' %}">Haco</a>
+
+        <!-- Welcome user if authenticated -->
+        {% if user.is_authenticated %}
+            <p class="navbar-brand">Welcome to Haco, {{ user }}</p>
+            <span class="nav-auth">
+                <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+            </span>
+        {% else %}
+            <span class="nav-auth">
+                <a class="nav-link" href="{% url 'register' %}">Register</a>
+                <a class="nav-link" href="{% url 'login' %}">Login</a>
+            </span>
+        {% endif %}
+
+    </nav>
+
+    <!-- Navigation Options -->
+    <div class="collapse" id="navbarToggleExternalContent">
+        <ul class="nav flex-column haco-nav">
+            <li class="nav-item">
+                <a href="{% url 'home'%}" class="nav-link active">Home</a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">Wildfire</a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">About Haco</a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">How to use Haco</a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Toggle Navigation Options -->
+    <nav class="navbar navbar-light haco-nav">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </nav>
 
     {% if messages %}
         {% for message in messages %}
@@ -38,7 +74,6 @@
 
     {% block content %}
     {% endblock %}
-
 
     <footer class="card-footer">
         <p>Haco | 2021</p>
