@@ -1,0 +1,47 @@
+/*
+    GENERAL/CORE STYLING FOR NAVIGATION BAR, HEADING AND FOOTING
+ */
+
+.haco-nav {
+    background-color: #EDF2F4;
+    color: #EF233C;
+}
+
+.haco-nav a {
+    color: #EF233C;
+}
+
+.haco-nav a:link {
+    text-decoration: none;
+}
+
+.haco-nav a:hover {
+    color: #D90429;
+    font-weight: lighter;
+}
+
+.nav-icon {
+    background-color: #2B2D42;
+}
+
+.haco-main {
+    background-color: #2B2D42;
+}
+
+.haco-main a {
+    text-decoration: none;
+}
+
+.haco-title {
+    color: #EF233C;
+    text-decoration: none;
+    font-size: 2.5rem;
+}
+
+.nav-auth {
+    margin-left: 75%;
+}
+
+.nav-auth a {
+    display: inline;
+}

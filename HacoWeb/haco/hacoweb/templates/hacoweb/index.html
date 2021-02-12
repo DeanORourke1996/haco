@@ -1,7 +1,17 @@
 {% extends 'hacoweb/core.html' %}
 
+<title>{% block title %}Haco | Wildfire Management{% endblock %}</title>
+
 <body>
     {% block content %}
+        <div class="container-fluid">
+            <div class="container">
+                {% if user.is_authenticated %}
 
+                    <p>Hello {{ user.username }}</p>
+                    <a href="{% url 'logout' %}">Logout</a>
+                {% endif %}
+            </div>
+        </div>
     {% endblock %}
 </body>
