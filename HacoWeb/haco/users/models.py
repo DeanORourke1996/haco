@@ -46,7 +46,7 @@ class User(AbstractBaseUser):
     username = models.CharField('Username', primary_key=True, max_length=150)
     password = models.CharField('User Password', null=False, max_length=150)
     first_name = models.CharField('First Name', null=True, max_length=50)
-    second_name = models.CharField('Last Name', null=True, max_length=50)
+    last_name = models.CharField('Last Name', null=True, max_length=50)
     country = models.CharField('Country', null=True, max_length=56)  # longest country name in the world is 56 chars
 
     # Required for method overide
