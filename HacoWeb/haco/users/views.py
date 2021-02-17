@@ -6,7 +6,6 @@ from django.contrib.auth import login, logout, authenticate
 
 # Register view
 def user_register(response):
-    status = 0
     if response.method == 'POST':
         form = RegistrationForm(response.POST)
         if form.is_valid():
