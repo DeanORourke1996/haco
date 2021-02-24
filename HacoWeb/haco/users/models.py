@@ -23,7 +23,7 @@ class UserManagement(BaseUserManager):
         )
 
         user.set_password(password)
-        user.save()
+        user.save(using=self._db)
         return user
 
     def create_staffuser(self, email, username, password, **kwargs):
@@ -47,7 +47,7 @@ class UserManagement(BaseUserManager):
         )
 
         user.save(using=self._db)
-        return self.create_user(email, username, password, **kwargs)
+        return user
 
 
 # Define a user

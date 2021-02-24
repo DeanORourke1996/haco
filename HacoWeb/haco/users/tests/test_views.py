@@ -1,6 +1,8 @@
-from django.test import TestCase, Client
+from django.test import TestCase, Client, RequestFactory
 from django.urls import reverse
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, authenticate
+from users.forms import RegistrationForm, LoginForm
+from users.views import user_register, user_login
 import pdb
 
 
@@ -10,6 +12,9 @@ class BaseViewsTest(TestCase):
     # Setup on init
     def setUp(self):
         # Init
+        self.c = Client()
+        self.factory = RequestFactory()
+        self.home_url = reverse('home')
         self.register_url = reverse('register')
         self.login_url = reverse('login')
         self.logout_url = reverse('logout')
@@ -61,7 +66,7 @@ class BaseViewsTest(TestCase):
         staff_user = staff_um.objects.create_staffuser(
             'johndoe@mail.com', 'johndoe', 'johndoespassword1234'
         )
-        self.assertEqual(staff_user.email, 'johndoe@mail.com', "Stops here.")
+        self.assertEqual(staff_user.email, 'johndoe@mail.com')
         self.assertEqual(staff_user.username, 'johndoe')
         self.assertEqual(str(staff_user), "johndoe")
         self.assertTrue(staff_user.is_staff)
@@ -81,3 +86,56 @@ class BaseViewsTest(TestCase):
             staff_um.objects.create_staffuser(
                 email='johndoe@email.com', username='johndoe123', password='johndoespass1234', is_active=False
             )
+
+
+# Test User Registration View
+class RegisterViewsTest(BaseViewsTest):
+    def test_register_form_save_POST(self):
+        form_data = {
+            'username': 'johndoe',
+            'email': 'dean@mail.com',
+            'password1': 'testuserpassword123',
+            'password2': 'testuserpassword123'
+        }
+        form = RegistrationForm(data=form_data)
+
+        # Form is Valid
+        form = form.is_valid()
+        # Create POST request
+        request = self.c.post(self.register_url, form_data, format="text/html")
+        # Redirects to home onece User is created
+        self.assertRedirects(request, self.home_url)
+
+    def test_register_form_GET(self):
+        # Invalid form data
+        form_data = {
+            'username': '',
+            'email': 'test@mail.com',
+            'password1': 'testuserpassword123',
+            'password2': 'testuserpassword123'
+        }
+
+        # Create GET request
+        request = self.c.get(self.register_url, form_data, format="text/html")
+        # Form is set to RegistrationForm()
+        self.assertEqual(request.status_code, 200)
+
+
+class LoginViewTest(BaseViewsTest):
+    def test_returns_redirect(self):
+        request = self.c.post(self.login_url, {'username': 'johndoe', 'password': 'johndoe1234'}, format="text/html")
+        self.assertEqual(request.status_code, 200)
+
+    def test_user_is_authenticated(self):
+        um = get_user_model()
+        user = um.objects.create_user(username='johndoe', password='johndoe1234', email='john@mail.com')
+        auth = authenticate(username='johndoe', password='johndoe1234')
+        self.assertTrue(user.is_authenticated)
+        self.assertRedirects(auth, self.home_url)
+
+
+class LogoutViewTest(BaseViewsTest):
+    # Test Logout method works
+    def test_logout_user(self):
+        request = self.c.post(self.logout_url)
+        self.assertEqual(request.status_code, 302)

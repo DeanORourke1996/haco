@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'hacoweb.apps.HacowebConfig',
     'users',
     'crispy_forms',
+    'leaflet'
 ]
 
 MIDDLEWARE = [
