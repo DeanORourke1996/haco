@@ -1,17 +1,30 @@
 {% extends 'hacoweb/core.html' %}
+{% load static %}
+{% load leaflet_tags %}
 
-<title>{% block title %}Haco | Wildfire Management{% endblock %}</title>
+<head>
+    <title>{% block title %}Haco | Wildfire Management{% endblock %}</title>
+</head>
 
 <body>
+    <!-- Map - Display user relevant map or dud map -->
     {% block content %}
-        <div class="container-fluid">
-            <div class="container">
-                {% if user.is_authenticated %}
 
-                    <p>Hello {{ user.username }}</p>
-                    <a href="{% url 'logout' %}">Logout</a>
-                {% endif %}
-            </div>
+        <div class="container-fluid">
+            <h2>Current Global Wildire Events</h2>
+            {% leaflet_map "haco_home_map" %}
         </div>
+
+        <script type="text/javascript">
+
+
+
+            window.addEventListener("map:init", function (e) {
+                let homeEvents = e.detail.map;
+                L.marker([50.5, 30.5]).addTo(homeEvents);
+
+            }, false);
+        </script>
+
     {% endblock %}
 </body>

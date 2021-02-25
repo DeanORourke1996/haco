@@ -27,6 +27,7 @@
       <list>
         <option value="$MODULE_DIR$/users/templates" />
         <option value="$MODULE_DIR$/hacoweb/templates" />
+        <option value="$MODULE_DIR$/hacoweb/homeMap/templates" />
       </list>
     </option>
   </component>

@@ -45,3 +45,15 @@
 .nav-auth a {
     display: inline;
 }
+
+/*
+  MAP STYLING
+ */
+
+#haco_home_map {
+    margin: 5% auto;
+    width: 70%;
+    height: 600px;
+}
+
+
