@@ -23,14 +23,6 @@
     <!-- LeafletJS -->
     {% leaflet_js %}
     {% leaflet_css %}
-
-    <!-- Script for Customizing Map -->
-    <script>
-        window.addEventListener("map:init", function(e) {
-            let d = e.detail;
-            L.marker().addTo(d.map);
-        }, false);
-    </script>
 </head>
 <body>
     <!-- Included with all scripts which extend from core script -->
@@ -39,7 +31,7 @@
 
         <!-- Welcome user if authenticated -->
         {% if user.is_authenticated %}
-            <p class="navbar-brand">Welcome to Haco, {{ user }}</p>
+            <p class="navbar" style="color: #EF233C;">Welcome to Haco, {{ user }}</p>
             <span class="nav-auth">
                 <a class="nav-link" href="{% url 'logout' %}">Logout</a>
             </span>
@@ -67,6 +59,11 @@
             <li class="nav-item">
                 <a href="#" class="nav-link">How to use Haco</a>
             </li>
+            {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a href="#" class="nav-link">Profile</a>
+                </li>
+            {% endif %}
         </ul>
     </div>
 
