@@ -1,9 +1,19 @@
 {% extends 'hacoweb/core.html' %}
+{% load static %}
+{% load leaflet_tags %}
 
 <title>{% block title %}Haco | Wildfire Management{% endblock %}</title>
 
 <body>
+    <!-- Map - Display user relevant map or dud map -->
     {% block content %}
+        {% if user.is_authenticated %}
+            {% leaflet_map "haco_map_user" %}
+
+        {% else %}
+            {% leaflet_map "haco_noauth_map" %}
+        {% endif %}
+
         <div class="container-fluid">
             <div class="container">
                 {% if user.is_authenticated %}

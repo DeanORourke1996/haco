@@ -23,6 +23,14 @@
     <!-- LeafletJS -->
     {% leaflet_js %}
     {% leaflet_css %}
+
+    <!-- Script for Customizing Map -->
+    <script>
+        window.addEventListener("map:init", function(e) {
+            let d = e.detail;
+            L.marker().addTo(d.map);
+        }, false);
+    </script>
 </head>
 <body>
     <!-- Included with all scripts which extend from core script -->
@@ -76,8 +84,6 @@
             </div>
         {% endfor %}
     {% endif %}
-
-    {% leaflet_map "haco_noauth_map" %}
 
     {% block content %}
     {% endblock %}

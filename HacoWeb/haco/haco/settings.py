@@ -107,6 +107,14 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+LEAFLET_CONFIG = {
+    'DEFAULT_CENTER': (53.3498, 6.2603),
+    'DEFAULT_ZOOM': 5,
+    'MIN_ZOOM': 3,
+    'MAX_ZOOM': 18,
+    'DEFAULT_PRECISION': 6,
+}
+
 AUTH_USER_MODEL = 'users.User'
 
 # Crispy Forms
