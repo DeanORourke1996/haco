@@ -1,0 +1,28 @@
+const path = require('path');
+
+module.exports = {
+    entry: {
+        app: './src/index.js'
+    },
+    watch: true,
+    devtool: 'source-map',
+    output: {
+        filename: '[name].[hash].js',
+        publicPath: 'http://localhost:8000/dist/',
+        path: path.resolve(__dirname, 'dist')
+    },
+    module: {
+        rules: [
+            {
+                test: /\.js$/,
+                exclude: /node_modules/,
+                use: ['babel-loader']
+            }
+        ]
+    },
+    resolve: {
+        extensions: [
+            '.js'
+        ]
+    }
+}
