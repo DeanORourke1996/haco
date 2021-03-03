@@ -1,1 +1,0 @@
-{"version":3,"sources":["webpack://haco_web/./src/index.js"],"names":["alert"],"mappings":"AAEAA,MAFU","file":"app.7401bb4d700c9bdc2be0.js","sourcesContent":["const x = \"this is a test\";\n\nalert(x);"],"sourceRoot":""}
