@@ -1,92 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/hacoMotion"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.MainActivity">
-
-    <LinearLayout
-        android:id="@+id/tb_haco"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-
-
-        android:layout_marginVertical="100dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-    <TextView
-        android:id="@+id/txtV_Haco"
-        android:layout_width="213dp"
-        android:layout_height="39dp"
-        android:layout_marginStart="99dp"
-        android:layout_marginTop="28dp"
-        android:gravity="center"
-        android:text="@string/str_app_name"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/nav_bottomHome"
-        android:layout_width="408dp"
-        android:layout_height="61dp"
-        android:layout_marginStart="1dp"
-        android:layout_marginBottom="1dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" >
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/btn_nav_login"
-                style="@style/Widget.AppCompat.Button.Borderless.Colored"
-                android:layout_width="100dp"
-                android:layout_height="match_parent"
-                android:text="@string/str_login" />
-
-            <Button
-                android:id="@+id/btn_nav_report"
-                style="@style/Widget.AppCompat.Button.Borderless.Colored"
-                android:layout_width="99dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="bottom"
-                android:text="@string/str_report" />
-
-            <Button
-                android:id="@+id/btn_nav_profile"
-                style="@style/Widget.AppCompat.Button.Borderless.Colored"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="@string/str_profile" />
-
-            <Button
-                android:id="@+id/btn_nav_settings"
-                style="@style/Widget.AppCompat.Button.Borderless.Colored"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="Button" />
-
-        </LinearLayout>
-    </com.google.android.material.bottomnavigation.BottomNavigationView>
+    android:background="@drawable/grad"
+    android:visibility="visible"
+    app:layoutDescription="@xml/activity_main_scene"
+    tools:context=".activities.MainActivity"
+    android:paddingTop="24dp">
 
     <ImageView
-        android:id="@+id/img_haco_logo"
-        android:layout_width="163dp"
-        android:layout_height="172dp"
-        android:layout_marginStart="124dp"
-        android:layout_marginTop="124dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtV_Haco"
-        app:srcCompat="@mipmap/ic_haco_logo" />
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:contentDescription="@string/str_contentDescriptionLogo"
+        android:src="@drawable/ic_haco"
+        android:visibility="visible" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/txt_haco_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:alpha="0.0"
+        android:text="@string/str_app_name"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
+        android:textColor="@color/hc_imperial_red" />
+
+</androidx.constraintlayout.motion.widget.MotionLayout>

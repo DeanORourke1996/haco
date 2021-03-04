@@ -1,4 +1,5 @@
 {% extends 'hacoweb/core.html' %}
+{% include 'hacoweb/../../../static/js/api/open_weather.js' %}
 {% load static %}
 {% load leaflet_tags %}
 
@@ -7,24 +8,29 @@
 </head>
 
 <body>
-    <!-- Map - Display user relevant map or dud map -->
+    <!-- Main Body -->
     {% block content %}
 
         <div class="container-fluid">
             <h2>Current Global Wildire Events</h2>
+            <!-- Leaflet -->
             {% leaflet_map "haco_home_map" %}
         </div>
 
-        <script type="text/javascript">
 
-
-
-            window.addEventListener("map:init", function (e) {
-                let homeEvents = e.detail.map;
-                L.marker([50.5, 30.5]).addTo(homeEvents);
-
-            }, false);
-        </script>
-
+        <!-- Scripting -->
+{#        <script type="text/javascript" src="api/open_weather.js">#}
+{#            let weather_data = [];#}
+{##}
+{#            // Initialize map#}
+{#            window.addEventListener("map:init",  (e) => {#}
+{#                let homeEvents = e.detail.map;#}
+{#                L.marker([50.5, 30.5]).addTo(homeEvents);#}
+{##}
+{#                weather_data = liveWeatherFeed(50.5, 30.5);#}
+{##}
+{#            }, false);#}
+{#        </script>#}
+        <script src="{% static 'dist/app.bundle.js' %}"></script>
     {% endblock %}
 </body>
