@@ -1,10 +1,18 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="HacoBaseTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/hc_amaranth_red</item>
         <item name="colorPrimaryDark">@color/hc_space_cadet</item>
         <item name="colorAccent">@color/hc_imperial_red</item>
+    </style>
+
+    <style name="SplashTheme" parent="HacoBaseTheme">
+        <item name="android:windowBackground">@drawable/splash_background</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+
     </style>
 
 </resources>

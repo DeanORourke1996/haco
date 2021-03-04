@@ -1,6 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-</LinearLayout>
+    <ImageView
+        android:id="@+id/img_haco_logo2"
+        android:layout_width="331dp"
+        android:layout_height="230dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="100dp"
+        android:contentDescription="@string/str_app_name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_haco" />
+
+    <EditText
+        android:id="@+id/txtUsername"
+        android:layout_width="210dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="101dp"
+        android:layout_marginTop="100dp"
+        android:autofillHints=""
+        android:background="@drawable/et_styling"
+        android:ems="10"
+        android:hint="@string/str_username"
+        android:importantForAccessibility="no"
+        android:inputType="textPersonName"
+        android:padding="4dp"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/img_haco_logo2" />
+
+    <EditText
+        android:id="@+id/txtPassword1"
+        android:layout_width="210dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="101dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/et_styling"
+        android:ems="10"
+        android:hint="@string/str_password1"
+        android:inputType="textPassword"
+        android:padding="4dp"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtEmail"
+        android:importantForAutofill="no" />
+
+    <EditText
+        android:id="@+id/txtPassword2"
+        android:layout_width="210dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="101dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/et_styling"
+        android:ems="10"
+        android:hint="@string/str_password2"
+        android:inputType="textPassword"
+        android:padding="4dp"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtPassword1"
+        android:importantForAutofill="no" />
+
+    <EditText
+        android:id="@+id/txtEmail"
+        android:layout_width="210dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="101dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/et_styling"
+        android:ems="10"
+        android:hint="@string/str_email"
+        android:inputType="textEmailAddress"
+        android:padding="4dp"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtUsername"
+        android:importantForAutofill="no" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="163dp"
+        android:layout_marginTop="80dp"
+        android:text="@string/str_register"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtPassword2" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
