@@ -7,8 +7,7 @@ module.exports = {
     watch: true,
     devtool: 'source-map',
     output: {
-        filename: '[name].[hash].js',
-        publicPath: 'http://localhost:8000/dist/',
+        filename: '[name].bundle.js',
         path: path.resolve(__dirname, 'dist')
     },
     module: {

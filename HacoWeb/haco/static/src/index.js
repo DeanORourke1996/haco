@@ -1,3 +1,3 @@
-const x = "this is a test";
+import {getliveWeatherFeed} from "./js/api/open_weather";
 
-alert(x);
+let weather_data = getliveWeatherFeed();

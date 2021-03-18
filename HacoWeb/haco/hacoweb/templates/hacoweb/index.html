@@ -1,5 +1,4 @@
 {% extends 'hacoweb/core.html' %}
-{% include 'hacoweb/../../../static/js/api/open_weather.js' %}
 {% load static %}
 {% load leaflet_tags %}
 
@@ -17,20 +16,18 @@
             {% leaflet_map "haco_home_map" %}
         </div>
 
+        <div id="x"></div>
+
 
         <!-- Scripting -->
-{#        <script type="text/javascript" src="api/open_weather.js">#}
-{#            let weather_data = [];#}
-{##}
-{#            // Initialize map#}
-{#            window.addEventListener("map:init",  (e) => {#}
-{#                let homeEvents = e.detail.map;#}
-{#                L.marker([50.5, 30.5]).addTo(homeEvents);#}
-{##}
-{#                weather_data = liveWeatherFeed(50.5, 30.5);#}
-{##}
-{#            }, false);#}
-{#        </script>#}
-        <script src="{% static 'dist/app.bundle.js' %}"></script>
+        <script>
+
+            window.addEventListener("map:init", (e) => {
+                let homeMap = e.detail.map;
+                let userLoc = homeMap.locate({setView: true});
+            });
+
+
+        </script>
     {% endblock %}
 </body>
