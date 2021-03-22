@@ -1,0 +1,27 @@
+{% extends 'hacoweb/core.html' %}
+{% load leaflet_tags %}
+{% leaflet_css %}
+{% leaflet_js %}
+
+{% block title %}Event #{{ event.id }}{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <h2>Current Global Wildire Events</h2>
+        <!-- Leaflet -->
+        {% leaflet_map "haco_detail_map" callback='map_init' %}
+    </div>
+
+    <script type="text/javascript">
+        function map_init(map, options){
+            // obtain lat and lon
+            let lon = "{{ event.lon }}";
+            let lat = "{{ event.lat }}";
+
+            // zoom to point and add it to map
+            map.setView([lat, lon], 12);
+            L.marker([lat, lon]).addTo(map);
+        }
+    </script>
+
+{% endblock %}

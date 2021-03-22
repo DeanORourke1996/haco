@@ -13,11 +13,13 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path
 from users import views as users
 from hacoweb import views as hacoweb
 from users import views as user_views
+from events import views as event_views
 from django.views.generic import TemplateView
 
 urlpatterns = [
@@ -27,4 +29,5 @@ urlpatterns = [
     path('logout/', user_views.user_logout, name='logout'),
     path('', hacoweb.home, name='home'),
     path('home/', hacoweb.home, name='home'),
+    #url(r'^event/(?P<pk>[0-9]+)$', )
 ]

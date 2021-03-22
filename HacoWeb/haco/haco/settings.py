@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.gis',
     'hacoweb.apps.HacowebConfig',
     'users',
-    'globalEventsAPI',
+    'events',
     'crispy_forms',
     'leaflet'
 ]

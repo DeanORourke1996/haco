@@ -1,6 +1,8 @@
 # Use requests for NASA archives
 import requests
 import datetime
+import csv
+import pandas as pd
 from help_scripts.global_funcs import get_julian_date, get_home_dir
 
 
@@ -33,17 +35,21 @@ def modis_record_fetch():
 
 
 # Overwrites data in a local text file
-def write_data():
-    data = modis_record_fetch()
-    file = get_home_dir()
-    file += '/hot_data/VIIRS_DATA_new.txt'
-    with open(file, mode='w') as f:
-        f.write(data)
+def write_data(data):
+    # Function call to fetch new data
+    file = get_home_dir()  # Get directory
+    file += '/hot_data/VIIRS_DATA_new.txt'  # Append new String to directory
+    with open(file, mode='w',) as f:
+        f.write(data)  # Write data to new file using Write mode which overwrites whatever there already
+    data_to_csv()
 
 
-# Process Data Using Pandas
-def data_sense():
-    import pandas as p
+# Simple Conversion Function to_csv using Pandas
+def data_to_csv():
     file = get_home_dir()
     file += '/hot_data/VIIRS_DATA_new.txt'
-    p.read_csv(file)
+    data = pd.read_csv(file)
+    file = get_home_dir() + "/hot_data/VIIRS_DATA_new.csv"
+    data.to_csv(file, mode='w')
+
+

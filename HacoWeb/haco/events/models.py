@@ -1,9 +1,10 @@
-from django.db import models
+from django.contrib.gis.db import models
 
 
-class MODISEventRecord(models.Model):
+class Event(models.Model):
+    # ID Column
+    id = models.AutoField(primary_key=True)
     # Response Data
-    name = models.CharField(max_length=50)
     lat = models.FloatField()
     lon = models.FloatField()
     bright_ti4 = models.FloatField()
@@ -18,6 +19,7 @@ class MODISEventRecord(models.Model):
     frp = models.FloatField()
     daynight = models.CharField(max_length=1)
 
-    # String representation of event
-    def __str__(self):
-        return self.name
+    # Float representation of event by Longitude and Latitude
+    def __float__(self):
+        return self.lat + self.lon
+
