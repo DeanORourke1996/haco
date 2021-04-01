@@ -83,17 +83,25 @@ def pre_db_process_data(event, *t):
 
         # Open connection cursor
         with connection.cursor() as c:
+
             c.execute(
                 'SELECT * '
                 'FROM events_event '
-                'WHERE lat BETWEEN (%s-%s)::float '
-                'AND (%s+%s)::float '
-                'AND lon BETWEEN (%s-%s)::float '
-                'AND (%s+%s)::float '
+                'WHERE lat BETWEEN (%s-%s)::float8 '
+                'AND (%s+%s)::float8 '
+                'AND lon BETWEEN (%s-%s)::float8 '
+                'AND (%s+%s)::float8 '
 
                 # Query Parameters
                 , [event.lat, lat_variance, event.lat, lat_variance, event.lon, lon_variance, event.lon, lon_variance]
             )
+            # Grab next row
+            row = c.fetchone()
+            if row is None:
+                return 1  # Row can be inserted
 
     except ValueError as e:
         raise ValueError(f'Value passed to fuction (dpd_lon()) invalid {e}')
+
+    # Row is not inserted
+    return 0
