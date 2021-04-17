@@ -1,17 +1,20 @@
 {% extends 'hacoweb/core.html' %}
 {% load crispy_forms_filters %}
 {% load crispy_forms_tags %}
+{% load static %}
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Haco | Login</title>
+    <link rel="stylesheet" href="{% static 'hacoweb/style.css' %}" type="text/css" media="screen">
 </head>
+
 <body>
     {% block content %}
         <div class="container-fluid">
-            <div class="content-section">
+            <div id="login-form" class="content-section">
                 <form method="POST" autocomplete="off">
                     {% csrf_token %}
                     <fieldset class="form-group">

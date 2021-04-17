@@ -1,4 +1,4 @@
-# List of global functions which can be used across the project
+# List of global functions which will be used across the project
 # for various applications
 from pathlib import Path
 import datetime

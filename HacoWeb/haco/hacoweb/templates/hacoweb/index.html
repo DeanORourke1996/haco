@@ -24,10 +24,24 @@
 
             window.addEventListener("map:init", (e) => {
                 let homeMap = e.detail.map;
-                let userLoc = homeMap.locate({setView: true});
+                homeMap.locate({setView: true, setZoom: 100})
+                .on('locationfound', (e) => {
+                    let marker = L.marker([e.latitude, e.longitude], {draggable: true, autoPan: true}).bindPopup('Found you :)').openPopup();
+                    let circle = L.circle([e.latitude, e.longitude], e.accuracy/2, {
+                        weight: 1,
+                        color: 'blue',
+                        fillColor: '#CACACA',
+                        fillOpacity: 0.2
+                    });
+                    homeMap.addLayer(marker);
+                    homeMap.addLayer(circle);
+                    homeMap.setZoom(100);
+                })
+                .on('locationerror', (e) => {
+                    console.log(e);
+                    alert('Location access denied.');
+                })
             });
-
-
         </script>
     {% endblock %}
 </body>

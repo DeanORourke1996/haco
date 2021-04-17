@@ -1,6 +1,7 @@
 # Use requests for NASA archives
 import requests
 import datetime
+import csv
 import pandas as pd
 from help_scripts.global_funcs import get_julian_date, get_home_dir, dpd_lon
 from django.db import connection
@@ -64,26 +65,26 @@ def data_to_csv():
 # greatly as the latitude changes. The length of a degree of latitude does not differ much as the
 # longitude changes and will be taken as the value of the length of a degree at the equator (69.172 miles)
 def pre_db_process_data(event, *t):
+    # Cast to floats for referential integrity
+    lat = float(event[0].lat)
+    lon = float(event[0].lon)
+
     # Define default thresholds
     try:
         if not t:
             # Default thresholds
-            t_lat = t_lon = 0.499
-        else:
-            # Threshold provided
-            t_lat = t_lon = t
+            t = 0.3
 
         # Calculate Distance per Degree
-        v_lon_dpd = dpd_lon(event.lat)  # Expects a latitude and returns a distance per degree (dpd) float val
+        v_lon_dpd = dpd_lon(lat)  # Expects a latitude and returns a distance per degree (dpd) float val
         c_lat_dpd = 69.172  # Constant... distance per degree at the equator for lat
 
         # Calculate Threshold Markers
-        lon_variance = (v_lon_dpd * t_lon) / 100
-        lat_variance = (c_lat_dpd * t_lat) / 100
+        lon_variance = (v_lon_dpd * t) / 100
+        lat_variance = (c_lat_dpd * t) / 100
 
         # Open connection cursor
         with connection.cursor() as c:
-
             c.execute(
                 'SELECT * '
                 'FROM events_event '
@@ -93,15 +94,16 @@ def pre_db_process_data(event, *t):
                 'AND (%s+%s)::float8 '
 
                 # Query Parameters
-                , [event.lat, lat_variance, event.lat, lat_variance, event.lon, lon_variance, event.lon, lon_variance]
+                , [lat, lat_variance, lat, lat_variance, lon,
+                   lon_variance, lon, lon_variance]
             )
             # Grab next row
             row = c.fetchone()
+            print(row)
             if row is None:
                 return 1  # Row can be inserted
+            else:
+                return 0  # Don't insert
 
     except ValueError as e:
         raise ValueError(f'Value passed to fuction (dpd_lon()) invalid {e}')
-
-    # Row is not inserted
-    return 0

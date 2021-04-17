@@ -4,35 +4,47 @@ from help_scripts.global_funcs import get_home_dir
 from events.data_funcs import pre_db_process_data
 
 # Set filepath
-file = get_home_dir() + '/hot_data/VIIRS_DATA_new.csv'
+file = get_home_dir() + '/data/MODIS_C6_DATA_new.csv'
 
 
-# Load in data to DB
-def load_data():
+# Load in data to DB from the local CSV file
+def load_data(hard):
+    count_inserts = 0
     with open(file) as f:
         reader = csv.reader(f)
         next(reader, None)
-        for event in reader:
-            pre_db_process_data(event)
-
-            inserted = Event.objects.get_or_create(
-                lat=event[1],
-                lon=event[2],
-                bright_ti4=event[3],
-                scan=event[4],
-                track=event[5],
-                acq_date=event[6],
-                acq_time=event[7],
-                satellite=event[8],
-                confidence=event[9],
-                version=event[10],
-                bright_ti5=event[11],
-                frp=event[12],
-                daynight=event[13]
+        for record in reader:
+            event = Event.objects.get_or_create(
+                lat=record[1],
+                lon=record[2],
+                bright_ti4=record[3],
+                scan=record[4],
+                track=record[5],
+                acq_date=record[6],
+                acq_time=record[7],
+                satellite=record[8],
+                confidence=record[9],
+                version=record[10],
+                bright_ti5=record[11],
+                frp=record[12],
+                daynight=record[13]
             )
-            inserted.save()  # Save each record
+            if not hard:
+                chk_insert = pre_db_process_data(event)  # Check the record for duplication
+                # Calls to a function which executes an SQL query via a cursor which
+                # will determine if the record is redundant or should be inserted
+                if chk_insert:
+                    event[0].save()
+                    count_inserts += 1  # Increment total records inserted
+                else:
+                    event[0].delete()
+                    next(reader, None)  # Skip this record, need not be inserted to DB
+            else:
+                event[0].save()
+
+    # Confirm function ran, records were/not inserted
+    return f"Load data ran succesfully. {str(count_inserts)} records were inserted."
 
 # Initial Load
 # Called from the Python Console
 
-# load_data()
