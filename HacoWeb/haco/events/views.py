@@ -13,3 +13,5 @@ def parse_events(request):
     if request.method == "GET":
         # Get events from server
         events = Event.objects.filter()
+
+        # these are new comments for testing
