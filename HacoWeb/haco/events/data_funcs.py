@@ -1,14 +1,39 @@
 # Use requests for NASA archives
 import requests
 import datetime
-import csv
 import pandas as pd
 from help_scripts.global_funcs import get_julian_date, get_home_dir, dpd_lon
 from django.db import connection
 
 
 # This function is for fetching most recent
-# fire events from NASA MODIS Satellite
+# fire events from NASA/SUOMI VIIRS Satellites
+def viirs_record_fetch():
+    # Get the path
+    file = get_home_dir()  # BASE DIR
+    file += '/nasa_app_bearer.txt'  # Append key
+
+    # Parameters for Request
+    key = open(file, "r").read()
+    headers = {
+        "Authorization": f"Bearer {key}"
+    }
+
+    url = "https://nrt3.modaps.eosdis.nasa.gov/api/v2/content" \
+          "/archives/FIRMS/suomi-npp-viirs-c2/Global/SUOMI_VIIRS_C2_Global_VNP14IMGTDL_NRT_"
+    date = datetime.datetime.today().strftime('%Y-%m-%d')
+    # Get today's julian date
+    today_julian = get_julian_date(date)
+    url += str(today_julian)
+    url += ".txt"
+    r = requests.get(url, headers=headers)
+
+    # Return data fetched
+    return r.text
+
+
+# This function is for fetching most recent
+# fire events from NASA MODIS Satellites
 def modis_record_fetch():
     # Get the path
     file = get_home_dir()  # BASE DIR
@@ -25,8 +50,8 @@ def modis_record_fetch():
           "/archives/FIRMS/c6/Global/MODIS_C6_Global_MCD14DL_NRT_"
     date = datetime.datetime.today().strftime('%Y-%m-%d')
     # Get a Julian date
-    today_julian = get_julian_date(date)
-    url += str(today_julian)
+    yesterday_julian = (get_julian_date(date) - 1)  # MODIS only has data for the previous day's events
+    url += str(yesterday_julian)
     # Append .txt to string as formatted in archive
     url += str(".txt")
     r = requests.get(url, headers=headers)
@@ -36,10 +61,18 @@ def modis_record_fetch():
 
 
 # Overwrites data in a local text file
-def write_modis_data(data):
-    # Function call to fetch new data
-    file = get_home_dir()  # Get directory
-    file += '/data/MODIS_C6_DATA_new.txt'  # Append new String to directory
+def write_modis_data(data, satellite):
+    file = ""
+    # what is the source of the data
+    if satellite == "modis":
+        # Function call to fetch new data
+        file = get_home_dir()  # Get directory
+        file += '/data/MODIS_C6_DATA_new.txt'  # Append new String to directory
+    elif satellite == "viirs":
+        # Function call to fetch new data
+        file = get_home_dir()  # Get directory
+        file += '/data/VIIRS_C6_DATA_new.txt'  # Append new String to directory
+
     with open(file, mode='w',) as f:
         f.write(data)  # Write data to new file using Write mode which overwrites whatever there already
     data_to_csv()
@@ -54,7 +87,7 @@ def data_to_csv():
     data.to_csv(file, mode='w')
 
 
-# Used to define a Wildfire event in terms of this system
+# To define a Wildfire event and
 # to avoid duplicating multiple records with the same coordinates
 # this will first check the records coordinates exist within the DB within a defined threshold.
 # A threshold exists and is passable as a parameter to the function to allow it to be changed dynamically.

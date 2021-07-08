@@ -41,6 +41,7 @@ def load_data(hard):
                     next(reader, None)  # Skip this record, need not be inserted to DB
             else:
                 event[0].save()
+                count_inserts += 1
 
     # Confirm function ran, records were/not inserted
     return f"Load data ran succesfully. {str(count_inserts)} records were inserted."
