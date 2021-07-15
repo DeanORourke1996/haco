@@ -8,6 +8,14 @@ from django.db import connection
 
 def geometa_fetch():
     url = "https://nrt3.modaps.eosdis.nasa.gov/api/v2/content/archives/geoMeta/61/AQUA/2018/MYD03_2018-04-17.txt"
+    key = get_nasa_key()
+    headers = {
+        "Authorization": f"Bearer {key}"
+    }
+
+    r = requests.get(url, headers=headers)
+
+    return r.text
 
 
 # This function is for fetching most recent
@@ -28,7 +36,7 @@ def viirs_record_fetch():
     url += ".txt"
     r = requests.get(url, headers=headers)
 
-    write_modis_data(r.text, "viirs")
+    write_to_local(r.text, "viirs")
     # Return data fetched
     return r.text
 
@@ -47,42 +55,32 @@ def modis_record_fetch():
           "/archives/FIRMS/modis-c6.1/Global/MODIS_C6_1_Global_MCD14DL_NRT_"
     date = datetime.datetime.today().strftime('%Y-%m-%d')
     # Get a Julian date
-    yesterday_julian = get_julian_date(date) - 1  # MODIS only has data for the previous day's events
+    yesterday_julian = get_julian_date(date)  # MODIS only has data for the previous day's events
     url += str(yesterday_julian)
     # Append .txt to string as formatted in archive
     url += str(".txt")
     r = requests.get(url, headers=headers)
 
-    write_modis_data(r.text, "modis")
+    write_to_local(r.text, "modis")
     # Return data fetched
     return r.text
 
 
 # Overwrites data in a local text file
-def write_modis_data(data, satellite):
-    file = ""
+def write_to_local(data, satellite):
     # what is the source of the data
     if satellite == "modis":
         # Function call to fetch new data
         file = get_home_dir()  # Get directory
-        file += '/data/MODIS_C6_DATA_new.txt'  # Append new String to directory
+        file += '/data/MODIS_C6_1_DATA_new.csv'  # Append new String to directory
+        with open(file, mode='w', ) as f:
+            f.write(data)  # Write data to new file using Write mode which overwrites whatever is there already
     elif satellite == "viirs":
         # Function call to fetch new data
         file = get_home_dir()  # Get directory
-        file += '/data/VIIRS_C6_DATA_new.txt'  # Append new String to directory
-
-    with open(file, mode='w',) as f:
-        f.write(data)  # Write data to new file using Write mode which overwrites whatever there already
-    data_to_csv()
-
-
-# Simple Conversion Function to_csv using Pandas
-def data_to_csv():
-    file = get_home_dir()
-    file += '/data/MODIS_C6_DATA_new.txt'
-    data = pd.read_csv(file)
-    file = get_home_dir() + "/data/MODIS_C6_DATA_new.csv"
-    data.to_csv(file, mode='w')
+        file += '/data/VIIRS_C6_DATA_new.csv'  # Append new String to directory
+        with open(file, mode='w', ) as f:
+            f.write(data)  # Write data to new file using Write mode which overwrites whatever is there already
 
 
 # To define a Wildfire event and
