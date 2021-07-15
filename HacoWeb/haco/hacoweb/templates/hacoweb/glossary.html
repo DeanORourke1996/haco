@@ -1,0 +1,18 @@
+{% extends 'hacoweb/core.html' %}
+{% load static %}
+{% load leaflet_tags %}
+
+<head>
+    <title>{% block title %}Learn About Wildfires{% endblock %}</title>
+</head>
+
+<body>
+    {% block content %}
+        <h3 class="h3">What are Wildfires?</h3>
+        <p>Wildfires are naturally occuring phenomenon which can be devastate large areas of land causing sever damage to community infrastucture
+        resources and livestock.</p>
+        <h3 class="h3">Why do they occur?</h3>
+        <p>Wildfires are often caused directly by the global warming effect. They occur more commonly in climates which are arid and dry. Wildifres can
+        also be caused by human activity, intentional or otherwise.</p>
+    {% endblock %}
+</body>

@@ -1,5 +1,4 @@
 {% extends 'hacoweb/core.html' %}
-{% include 'hacoweb/../../../static/js/api/open_weather.js' %}
 {% load static %}
 {% load leaflet_tags %}
 
@@ -17,20 +16,49 @@
             {% leaflet_map "haco_home_map" %}
         </div>
 
+        <div id="x"></div>
+
 
         <!-- Scripting -->
-{#        <script type="text/javascript" src="api/open_weather.js">#}
-{#            let weather_data = [];#}
-{##}
-{#            // Initialize map#}
-{#            window.addEventListener("map:init",  (e) => {#}
-{#                let homeEvents = e.detail.map;#}
-{#                L.marker([50.5, 30.5]).addTo(homeEvents);#}
-{##}
-{#                weather_data = liveWeatherFeed(50.5, 30.5);#}
-{##}
-{#            }, false);#}
-{#        </script>#}
-        <script src="{% static 'dist/app.bundle.js' %}"></script>
+        <script>
+
+            window.addEventListener("map:init", (e) => {
+                // Map Reference
+                let homeMap = e.detail.map;
+                let latlng; // will be used to update coordinates as map state changes
+                // Locates user and sets the view
+                homeMap.locate({setView: true, setZoom: 300})
+                .on('locationfound', (e) => { // on location found begin drawing marker
+                    let marker = L.marker([e.latitude, e.longitude], {
+                        draggable: true,
+                        autoPan: true
+                    })
+                    // after the marker has been dropped, regather coordinates pass them out to global var
+                    .on('dragend', () => {
+                        marker.unbindPopup();
+                        latlng = marker.getLatLng();
+                        marker.bindPopup('Lat: ' + latlng.lat.toFixed(6) + ', Lon: ' + latlng.lng.toFixed(6));
+                        marker.openPopup();
+                    })
+                    .bindPopup('Lat: ' + e.latitude + ', Lon: '+ e.longitude)
+                    let circle = L.circle([e.latitude, e.longitude], e.accuracy/2, {
+                        weight: 1,
+                        color: 'blue',
+                        fillColor: '#CACACA',
+                        fillOpacity: 0.2
+                    });
+                    // Add layers (marker/circle) to the map
+                    homeMap.addLayer(marker);
+                    homeMap.addLayer(circle);
+                    // Open popup when location found
+                    marker.openPopup();
+                })
+                .on('locationerror', (e) => {
+                    console.log(e);
+                    alert('Location access denied.');
+                })
+            });
+        </script>
+
     {% endblock %}
 </body>
