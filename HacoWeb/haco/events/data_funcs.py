@@ -2,19 +2,19 @@
 import requests
 import datetime
 import pandas as pd
-from help_scripts.global_funcs import get_julian_date, get_home_dir, dpd_lon
+from help_scripts.global_funcs import get_julian_date, get_home_dir, get_nasa_key, dpd_lon
 from django.db import connection
+
+
+def geometa_fetch():
+    url = "https://nrt3.modaps.eosdis.nasa.gov/api/v2/content/archives/geoMeta/61/AQUA/2018/MYD03_2018-04-17.txt"
 
 
 # This function is for fetching most recent
 # fire events from NASA/SUOMI VIIRS Satellites
 def viirs_record_fetch():
-    # Get the path
-    file = get_home_dir()  # BASE DIR
-    file += '/nasa_app_bearer.txt'  # Append key
-
     # Parameters for Request
-    key = open(file, "r").read()
+    key = get_nasa_key()
     headers = {
         "Authorization": f"Bearer {key}"
     }
@@ -36,22 +36,18 @@ def viirs_record_fetch():
 # This function is for fetching most recent
 # fire events from NASA MODIS Satellites
 def modis_record_fetch():
-    # Get the path
-    file = get_home_dir()  # BASE DIR
-    file += '/nasa_app_bearer.txt'  # Append key
-
     # Parameters for Request
-    key = open(file, "r").read()  # Key Excluded from GIT
+    key = get_nasa_key()
     headers = {
         "Authorization": f"Bearer {key}"
     }
 
     # MODIS Data Retrieval Entry Point
     url = "https://nrt3.modaps.eosdis.nasa.gov/api/v2/content" \
-          "/archives/FIRMS/c6/Global/MODIS_C6_Global_MCD14DL_NRT_"
+          "/archives/FIRMS/modis-c6.1/Global/MODIS_C6_1_Global_MCD14DL_NRT_"
     date = datetime.datetime.today().strftime('%Y-%m-%d')
     # Get a Julian date
-    yesterday_julian = (get_julian_date(date) - 1)  # MODIS only has data for the previous day's events
+    yesterday_julian = get_julian_date(date) - 1  # MODIS only has data for the previous day's events
     url += str(yesterday_julian)
     # Append .txt to string as formatted in archive
     url += str(".txt")

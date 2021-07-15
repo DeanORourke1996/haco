@@ -5,6 +5,15 @@ import datetime
 import math
 
 
+# Get NASA App Bearer Key
+def get_nasa_key():
+    file = get_home_dir() + '/nasa_app_bearer.txt'
+    key = open(file, "r").read()
+
+    # Return the key
+    return key
+
+
 # Get a BASE_DIR
 def get_home_dir():
     base_dir = Path(__file__).resolve().parent.parent
