@@ -13,3 +13,7 @@ def weather(request):
 
 def home(response):
     return render(response, 'hacoweb/index.html')
+
+
+def glossary(response):
+    return render(response, 'hacoweb/glossary.html')

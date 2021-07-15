@@ -9,8 +9,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <!-- Android/Chrome -->
+    <meta name="theme-color" content="#ffffff">
     <title>{% block title %}{% endblock%}</title>
 
+    <!-- Favicon Load -->
+    <link rel="icon" href="{% static 'hacoweb/img/haco.svg' %}">
+    <!-- Safari -->
+    <link rel=”mask-icon” href=”{% static 'hacoweb/img/haco.svg' %}” color=”#000000">
+    <!-- iOS -->
+    <link rel="apple-touch-icon" href="{% static 'hacoweb/img/haco.svg' %}">
     <!-- Bootstrap4 CDN -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'hacoweb/style.css' %}" type="text/css" media="screen">
@@ -54,7 +62,7 @@
                 <a href="#" class="nav-link">Wildfire</a>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link">About Haco</a>
+                <a href="{% url 'glossary' %}" class="nav-link">About Haco</a>
             </li>
             <li class="nav-item">
                 <a href="#" class="nav-link">How to use Haco</a>

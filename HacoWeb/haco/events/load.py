@@ -3,12 +3,16 @@ from events.models import Event
 from help_scripts.global_funcs import get_home_dir
 from events.data_funcs import pre_db_process_data
 
-# Set filepath
-file = get_home_dir() + '/data/MODIS_C6_DATA_new.csv'
-
 
 # Load in data to DB from the local CSV file
-def load_data(hard):
+def load_data(hard, mode):
+    file = ""
+    if mode == "modis":
+        # Set filepath
+        file = get_home_dir() + '/data/MODIS_C6_DATA_new.csv'
+    elif mode == "viirs":
+        # Set filepath
+        file = get_home_dir() + '/data/VIIRS_DATA_new.csv'
     count_inserts = 0
     with open(file) as f:
         reader = csv.reader(f)
@@ -27,7 +31,8 @@ def load_data(hard):
                 version=record[10],
                 bright_ti5=record[11],
                 frp=record[12],
-                daynight=record[13]
+                daynight=record[13],
+                resolution=mode
             )
             if not hard:
                 chk_insert = pre_db_process_data(event)  # Check the record for duplication

@@ -28,6 +28,7 @@ def viirs_record_fetch():
     url += ".txt"
     r = requests.get(url, headers=headers)
 
+    write_modis_data(r.text, "viirs")
     # Return data fetched
     return r.text
 
@@ -56,6 +57,7 @@ def modis_record_fetch():
     url += str(".txt")
     r = requests.get(url, headers=headers)
 
+    write_modis_data(r.text, "modis")
     # Return data fetched
     return r.text
 
@@ -132,7 +134,6 @@ def pre_db_process_data(event, *t):
             )
             # Grab next row
             row = c.fetchone()
-            print(row)
             if row is None:
                 return 1  # Row can be inserted
             else:

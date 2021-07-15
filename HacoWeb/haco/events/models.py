@@ -18,6 +18,7 @@ class Event(models.Model):
     bright_ti5 = models.FloatField()
     frp = models.FloatField()
     daynight = models.CharField(max_length=1)
+    resolution = models.CharField(max_length=5)
 
     # Float representation of event by Longitude and Latitude
     def __float__(self):
