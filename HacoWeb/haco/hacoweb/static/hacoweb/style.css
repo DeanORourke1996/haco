@@ -1,19 +1,51 @@
 /*
+    FONT NOTES:
+
+    FOR 'OSWALD'
+    WEIGHTS AVAILABLE ARE: 200, 400, 700
+
+ */
+
+/*
     GENERAL/CORE STYLING FOR NAVIGATION BAR, HEADING AND FOOTING
  */
+* {
+    font-family: 'Oswald', sans-serif;
+}
+
+/*
+    MEDIA QUERIES
+ */
+@media only screen and (min-width: 576px){
+
+
+    #haco_home_map {
+        width: 100%;
+        max-height: 400px;
+    }
+}
+
+@media only screen and (min-width: 768px){
+
+}
+
+@media only screen and (min-width: 992px){
+
+}
 
 a:hover {
     text-decoration: none;
-    color: inherit;
+    color: #edae49;
 }
 
 .haco-nav {
-    background-color: #EDF2F4;
-    color: #EF233C;
+    background-color: #8d99ae;
+    color: #edae49;
+    font-size: 1rem;
 }
 
 .haco-nav a {
-    color: #EF233C;
+    color: #edae49;
 }
 
 .haco-nav a:link {
@@ -22,7 +54,7 @@ a:hover {
 
 .haco-nav a:hover {
     color: #D90429;
-    font-weight: lighter;
+    font-weight: bolder;
 }
 
 .nav-icon {
@@ -33,35 +65,22 @@ a:hover {
     background-color: #2B2D42;
 }
 
-.haco-main a {
-    text-decoration: none;
+.haco-main {
+    color: #edae49;
 }
 
 .haco-title {
     color: #EF233C;
-    font-size: 2.5rem;
-}
-
-.nav-auth {
-    margin-left: 75%;
-}
-
-.nav-auth a {
-    display: inline;
+    font-size: 3.5rem;
 }
 
 /*
   MAP STYLING
  */
-
 #haco_home_map {
     margin: 5% auto;
-    width: 70%;
-    height: 600px;
-}
-
-#login-form {
-    margin: 200px;
+    max-width: 80%;
+    max-height: 600px;
 }
 
 

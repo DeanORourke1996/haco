@@ -9,6 +9,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200;400;700&display=swap" rel="stylesheet">
+
     <!-- Android/Chrome -->
     <meta name="theme-color" content="#ffffff">
     <title>{% block title %}{% endblock%}</title>
@@ -34,23 +39,18 @@
 </head>
 <body>
     <!-- Included with all scripts which extend from core script -->
-    <nav class="navbar navbar-expand-lg haco-main">
-        <a class="navbar-brand haco-title" href="{% url 'home' %}">Haco</a>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="haco-main col-12 col-lg-8"><a class="haco-title" href="{% url 'home' %}">Haco</a></div>
+            {% if user.is_authenticated %}
+                <div class="haco-main col-lg-4">Welcome, {{ user.username }}</div>
+            {% else %}
+                <div class="haco-main col-lg-2"><a href="{% url 'login' %}">Sign Up</a></div>
+                <div class="haco-main col-lg-2"><a href="{% url 'register' %}">Register</a></div>
+            {% endif %}
+        </div>
+    </div>
 
-        <!-- Welcome user if authenticated -->
-        {% if user.is_authenticated %}
-            <p class="navbar" style="color: #EF233C;">Welcome to Haco, {{ user }}</p>
-            <span class="nav-auth">
-                <a class="nav-link" href="{% url 'logout' %}">Logout</a>
-            </span>
-        {% else %}
-            <span class="nav-auth">
-                <a class="nav-link" href="{% url 'register' %}">Register</a>
-                <a class="nav-link" href="{% url 'login' %}">Login</a>
-            </span>
-        {% endif %}
-
-    </nav>
 
     <!-- Navigation Options -->
     <div class="collapse" id="navbarToggleExternalContent">

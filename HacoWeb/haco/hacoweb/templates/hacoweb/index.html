@@ -10,13 +10,11 @@
     <!-- Main Body -->
     {% block content %}
 
-        <div class="container-fluid">
+        <div class="container">
             <h2>Current Global Wildire Events</h2>
             <!-- Leaflet -->
             {% leaflet_map "haco_home_map" %}
         </div>
-
-        <div id="x"></div>
 
 
         <!-- Scripting -->
@@ -39,11 +37,12 @@
                         latlng = marker.getLatLng();
                         marker.bindPopup('Lat: ' + latlng.lat.toFixed(6) + ', Lon: ' + latlng.lng.toFixed(6));
                         marker.openPopup();
+                        circle.remove();
                     })
                     .bindPopup('Lat: ' + e.latitude + ', Lon: '+ e.longitude)
                     let circle = L.circle([e.latitude, e.longitude], e.accuracy/2, {
                         weight: 1,
-                        color: 'blue',
+                        color: '#b6e0e2',
                         fillColor: '#CACACA',
                         fillOpacity: 0.2
                     });
