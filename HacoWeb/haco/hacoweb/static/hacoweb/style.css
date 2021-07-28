@@ -9,78 +9,177 @@
 /*
     GENERAL/CORE STYLING FOR NAVIGATION BAR, HEADING AND FOOTING
  */
+.leaflet-touch .leaflet-control-layers,
+.leaflet-touch .leaflet-bar {
+    border: 2px solid rgba(0,0,0,0.2);
+    background-clip: padding-box;
+    -webkit-background-clip: padding-box;
+}
+
 * {
     font-family: 'Oswald', sans-serif;
+}
+
+html {
+    font-size: 16px;
+}
+
+body {
+    background-color: #b6e0e2;
+}
+
+a, a:hover{
+    text-decoration: none;
+    color: inherit;
 }
 
 /*
     MEDIA QUERIES
  */
-@media only screen and (min-width: 576px){
 
+/*
+    Media - Small Screens
+ */
+@media only screen and (min-width: 376px){
+    body {
+        padding: 0;
+        margin: 0;
+    }
+
+    html, body, #init_map, #haco_home_map {
+        height: 50vh;
+        width: 100vw;
+    }
+
+    #init_map {
+        margin-bottom: 200px;
+    }
+
+    .haco-main {
+        padding: 220px 0;
+        background-color: #2B2D42;
+    }
+
+    .haco-title {
+        max-width: 100%;
+        height: auto;
+        font-size: 12rem;
+        text-align: center;
+        color: #EF233C;
+    }
+
+    .haco-nav {
+        display: none;
+    }
+
+    .nb-opts {
+        display: none;
+    }
 
     #haco_home_map {
+        margin: 50px 0;
         width: 100%;
-        max-height: 400px;
     }
+
+    .map {
+        width: 100%;
+    }
+
+    .haco-title img {
+        width: 25%;
+        height: auto;
+        margin-bottom: 15px;
+    }
+
+    .haco-nav {
+        display: none;
+    }
+
+    #haco_nav_m, #nav_collap_container {
+        display: block;
+    }
+
 }
 
+/*
+    Media - Medium Screens i.e. tablets, lanscape mobiles
+ */
 @media only screen and (min-width: 768px){
 
 }
 
+/*
+    Media - Large Screens
+ */
 @media only screen and (min-width: 992px){
+    .haco-main {
+        padding: 10px;
+        background-color: #2B2D42;
+        color: #EF233C;
+    }
 
+    .haco-title {
+        color: #EF233C;
+        padding: 2rem;
+        font-size: 4rem;
+    }
+
+    .haco-nav {
+        display: block;
+        background-color: #8d99ae;
+        color: #edae49;
+        font-size: 1.25rem;
+        padding: 1rem;
+        border-radius: 0 0 25px 25px;
+    }
+
+    #nav_collap_container, #haco_nav_m {
+        display: none;
+    }
+
+    .nav-icon {
+        background-color: #2B2D42;
+    }
+
+    .nb-opts {
+        display: block;
+        padding-top: 1.5rem;
+    }
+
+    .nb-opts a {
+        color: #edae49;
+    }
+
+    .haco-title img {
+        margin-bottom: 5px;
+        margin-left: 2rem;
+        vertical-align: center;
+    }
+
+    /*
+      MAP STYLING
+     */
+    #haco_home_map {
+        margin: 5% auto;
+        width: 80%;
+        height: 600px;
+    }
 }
 
-a:hover {
-    text-decoration: none;
-    color: #edae49;
-}
-
-.haco-nav {
-    background-color: #8d99ae;
-    color: #edae49;
-    font-size: 1rem;
+/* Globals */
+.haco-nav a:first-of-type {
+    padding-left: 1rem;
 }
 
 .haco-nav a {
+    padding: 1rem;
+    border-right: 0.15pc solid #edae49;
     color: #edae49;
-}
-
-.haco-nav a:link {
-    text-decoration: none;
 }
 
 .haco-nav a:hover {
-    color: #D90429;
-    font-weight: bolder;
-}
-
-.nav-icon {
-    background-color: #2B2D42;
-}
-
-.haco-main {
-    background-color: #2B2D42;
-}
-
-.haco-main {
-    color: #edae49;
-}
-
-.haco-title {
+    text-decoration: none;
     color: #EF233C;
-    font-size: 3.5rem;
-}
-
-/*
-  MAP STYLING
- */
-#haco_home_map {
-    margin: 5% auto;
-    max-width: 80%;
-    max-height: 600px;
 }
 
 

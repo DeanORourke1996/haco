@@ -10,8 +10,7 @@
     <!-- Main Body -->
     {% block content %}
 
-        <div class="container">
-            <h2>Current Global Wildire Events</h2>
+        <div id="init_map">
             <!-- Leaflet -->
             {% leaflet_map "haco_home_map" %}
         </div>
@@ -28,6 +27,9 @@
                 homeMap.locate({setView: true, setZoom: 300})
                 .on('locationfound', (e) => { // on location found begin drawing marker
                     let marker = L.marker([e.latitude, e.longitude], {
+                        maxZoom: 18,
+                        tileSize: 512,
+                        zoomOffset: -1,
                         draggable: true,
                         autoPan: true
                     })
