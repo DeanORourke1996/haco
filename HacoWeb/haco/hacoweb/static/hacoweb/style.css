@@ -9,12 +9,6 @@
 /*
     GENERAL/CORE STYLING FOR NAVIGATION BAR, HEADING AND FOOTING
  */
-.leaflet-touch .leaflet-control-layers,
-.leaflet-touch .leaflet-bar {
-    border: 2px solid rgba(0,0,0,0.2);
-    background-clip: padding-box;
-    -webkit-background-clip: padding-box;
-}
 
 * {
     font-family: 'Oswald', sans-serif;
@@ -41,20 +35,41 @@ a, a:hover{
     Media - Small Screens
  */
 @media only screen and (min-width: 376px){
+    /*
+        remove blue visited on anchor tags after clicked
+     */
+    a:visited {
+        color: inherit;
+        text-decoration: none;
+    }
+
+    /*
+        prepares body for map
+     */
     body {
         padding: 0;
         margin: 0;
     }
 
+    /*
+        initialises the map and prepares the html and body
+     */
     html, body, #init_map, #haco_home_map {
         height: 50vh;
         width: 100vw;
     }
 
+    /*
+        map container
+     */
     #init_map {
         margin-bottom: 200px;
     }
 
+    /*
+        main element at the top of page
+        to be larger on mobile devices
+     */
     .haco-main {
         padding: 220px 0;
         background-color: #2B2D42;
@@ -68,36 +83,88 @@ a, a:hover{
         color: #EF233C;
     }
 
-    .haco-nav {
-        display: none;
-    }
-
+    /*
+        navigation banner options sign in or register not displayed
+        on mobile as they will appear in the dropdown menu
+     */
     .nb-opts {
         display: none;
     }
+
+     /*
+        fill the mobile screen with the map once
+     */
 
     #haco_home_map {
         margin: 50px 0;
         width: 100%;
     }
 
-    .map {
-        width: 100%;
+    /*
+        hide website navigation when rendering mobile
+     */
+    .haco-nav {
+        display: none;
     }
 
+    /*
+        image refinements for mobile
+     */
     .haco-title img {
         width: 25%;
         height: auto;
         margin-bottom: 15px;
     }
 
-    .haco-nav {
-        display: none;
+    /*
+        navbar-custom Works with the entire mobile nav class
+        as a unit
+     */
+    .navbar-custom {
+        background-color: #edae49;
+        padding: 20px 20px;
     }
 
-    #haco_nav_m, #nav_collap_container {
-        display: block;
+    /*
+        list and anchor items within
+     */
+    .navbar-custom li a {
+        font-size: 3rem;
+        text-decoration: none;
+        color: #EF233C;
+
     }
+
+    /*
+        anchor and icon hovering
+     */
+    .navbar-custom a:hover, i:hover {
+        color: #2B2D42;
+    }
+
+    /*
+        icon active (clicked)
+     */
+    .navbar-custom i:active {
+        color: #EF233C;
+    }
+
+    /*
+        button element
+     */
+    #h_button {
+        background-color: #edae49;
+        border: 2px solid #EF233C;
+        border-radius: 10px;
+    }
+
+    /*
+        contains the "button", the <i> element (icon)
+     */
+    .btn-label {
+        color: #EF233C;
+    }
+
 
 }
 

@@ -1,11 +1,11 @@
 #!/Users/dean/haco/HacoWeb/haco/venv/bin/python
 
 import sys
-# import osgeo.utils.gdalmove as a convenience to use as a script
-from osgeo.utils.gdalmove import *  # noqa
-from osgeo.utils.gdalmove import main
+# import osgeo_utils.gdalmove as a convenience to use as a script
+from osgeo_utils.gdalmove import *  # noqa
+from osgeo_utils.gdalmove import main
 from osgeo.gdal import deprecation_warn
 
 
-deprecation_warn('gdalmove', 'utils')
+deprecation_warn('gdalmove')
 sys.exit(main(sys.argv))
