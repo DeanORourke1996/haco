@@ -42,39 +42,18 @@
     {% leaflet_css %}
 </head>
 <body>
-    <!-- Included with all scripts which extend from core script -->
-    <div class="container-fluid haco-main">
-        <div class="row">
-            <div class="col-sm-12 col-md-12 col-lg-5 haco-title">
-                <a href="{% url 'home' %}">Haco
-                <img class="img-fluid" src="{% static 'hacoweb/img/haco.svg'%}" alt="Haco Logo"></a>
-            </div>
-            {% if user.is_authenticated %}
-                <div class="col-lg-4">Welcome, {{ user.username }}</div>
-            {% else %}
-                <div class="col-sm offset-md-2 offset-lg-3 nb-opts"><a href="{% url 'login' %}">Sign Up</a></div>
-                <div class="col-sm offset-md-2 offset-lg-1 nb-opts"><a href="{% url 'register' %}">Register</a></div>
-            {% endif %}
-        </div>
-    </div>
-
-
-    <!-- Navigation Options -->
-    <div class="col-md-12 haco-nav">
-        <div class="container-fluid">
-            <div class="row">
-                <a href="{% url 'home' %}">Home</a>
-                <a href="{% url 'glossary' %}">Learn About Wildfire</a>
-                <a href="#">Submit a Report</a>
-            </div>
-        </div>
-    </div>
 
     <nav class="navbar-custom" id="haco_nav_m">
 
         <button id="h_button" title="horizontal bars" class="navbar-toggle" type="button" data-toggle="collapse" data-target="#haco_nav_bm">
-            <span class="btn-label"><i class="fa fa-bars fa-5x"></i></span>
+            <span class="btn-label"><i class="transcon fa fa-bars fa-2x"></i></span>
         </button>
+
+        <script type="text/javascript">
+            $('.transcon').click(function (){
+                $(this).toggleClass("down");
+            })
+        </script>
 
         <div class="navbar-collapse collapse navbar" id="haco_nav_bm">
             <ul class="navbar-nav haco_main">
@@ -87,9 +66,46 @@
                 <li class="nav-item">
                     <a class="nav-link" href="#">Submit a Report</a>
                 </li>
+                <li><hr class="dropdown-divider"></li>
+                <li class="acc nav-item">
+                    <a class="nav-link" href="{% url 'register' %}">Sign Up</a>
+                </li>
+                <li class="acc nav-item">
+                    <a class="nav-link" href="{% url 'login' %}">Login</a>
+                </li>
             </ul>
         </div>
     </nav>
+
+    <!-- Included with all scripts which extend from core script -->
+    <div class="container-fluid haco-main">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-5 haco-title">
+                <a href="{% url 'home' %}">Haco
+                <img src="{% static 'hacoweb/img/haco.svg'%}" alt="Haco Logo"></a>
+            </div>
+            {% if user.is_authenticated %}
+                <div class="col-lg-4">Welcome, {{ user.username }}</div>
+            {% else %}
+                <div class="col-sm offset-md-2 offset-lg-3 nb-opts"><a href="{% url 'login' %}">Sign Up</a></div>
+                <div class="col-sm offset-md-2 offset-lg-1 nb-opts"><a href="{% url 'register' %}">Register</a></div>
+            {% endif %}
+        </div>
+    </div>
+
+
+    <!-- Navigation Options -->
+    <div class="col-md-8 col-lg-12 haco-nav">
+        <div class="container-fluid">
+            <div class="row">
+                <a href="{% url 'home' %}">Home</a>
+                <a href="{% url 'glossary' %}">Learn About Wildfire</a>
+                <a href="#">Submit a Report</a>
+            </div>
+        </div>
+    </div>
+
+
 
 
     {% if messages %}

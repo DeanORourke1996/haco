@@ -34,7 +34,7 @@ a, a:hover{
 /*
     Media - Small Screens
  */
-@media only screen and (min-width: 376px){
+@media only screen and (min-width: 250px){
     /*
         remove blue visited on anchor tags after clicked
      */
@@ -44,17 +44,9 @@ a, a:hover{
     }
 
     /*
-        prepares body for map
-     */
-    body {
-        padding: 0;
-        margin: 0;
-    }
-
-    /*
         initialises the map and prepares the html and body
      */
-    html, body, #init_map, #haco_home_map {
+    #init_map, #haco_home_map {
         height: 50vh;
         width: 100vw;
     }
@@ -71,14 +63,15 @@ a, a:hover{
         to be larger on mobile devices
      */
     .haco-main {
-        padding: 220px 0;
+        overflow-x: hidden;
+        padding: 80px 0 120px 0;
         background-color: #2B2D42;
     }
 
     .haco-title {
-        max-width: 100%;
+        width: 100%;
         height: auto;
-        font-size: 12rem;
+        font-size: 7rem;
         text-align: center;
         color: #EF233C;
     }
@@ -96,7 +89,6 @@ a, a:hover{
      */
 
     #haco_home_map {
-        margin: 50px 0;
         width: 100%;
     }
 
@@ -111,7 +103,7 @@ a, a:hover{
         image refinements for mobile
      */
     .haco-title img {
-        width: 25%;
+        width: 30%;
         height: auto;
         margin-bottom: 15px;
     }
@@ -121,7 +113,7 @@ a, a:hover{
         as a unit
      */
     .navbar-custom {
-        background-color: #edae49;
+        background-color: #2B2D42;
         padding: 20px 20px;
     }
 
@@ -129,16 +121,20 @@ a, a:hover{
         list and anchor items within
      */
     .navbar-custom li a {
-        font-size: 3rem;
+        font-size: 2rem;
         text-decoration: none;
         color: #EF233C;
 
     }
 
+    .btn-label {
+        font-size: 2rem;
+    }
+
     /*
         anchor and icon hovering
      */
-    .navbar-custom a:hover, i:hover {
+    .navbar-custom a:hover {
         color: #2B2D42;
     }
 
@@ -149,13 +145,35 @@ a, a:hover{
         color: #EF233C;
     }
 
+    .dropdown-divider {
+        color: #EF233C;
+    }
+
+    .acc {
+        color: #edae49;
+    }
+
     /*
         button element
      */
     #h_button {
-        background-color: #edae49;
-        border: 2px solid #EF233C;
-        border-radius: 10px;
+        background-color: #2B2D42;
+        border: none;
+    }
+
+     /*
+        rotation for icon on click
+      */
+    .transcon {
+        -moz-transition: transform 0.7s;
+        -webkit-transition: transform 0.7s;
+        transition: transform 0.7s;
+    }
+
+    .transcon.down{
+        -moz-transform: rotate(90deg);
+        -webkit-transform: rotate(90deg);
+        transform: rotate(90deg);
     }
 
     /*
@@ -165,8 +183,12 @@ a, a:hover{
         color: #EF233C;
     }
 
-
 }
+
+/*
+    X-small screens and
+    high pixel-density resolutions i.e. iPhone & Samsung
+ */
 
 /*
     Media - Medium Screens i.e. tablets, lanscape mobiles
@@ -206,6 +228,10 @@ a, a:hover{
 
     .nav-icon {
         background-color: #2B2D42;
+    }
+
+    .navbar-custom {
+        display: none;
     }
 
     .nb-opts {

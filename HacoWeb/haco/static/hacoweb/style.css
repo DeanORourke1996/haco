@@ -34,65 +34,164 @@ a, a:hover{
 /*
     Media - Small Screens
  */
-@media only screen and (min-width: 376px){
-    body {
-        padding: 0;
-        margin: 0;
+@media only screen and (min-width: 250px){
+    /*
+        remove blue visited on anchor tags after clicked
+     */
+    a:visited {
+        color: inherit;
+        text-decoration: none;
     }
 
-    html, body, #init_map, #haco_home_map {
+    /*
+        initialises the map and prepares the html and body
+     */
+    #init_map, #haco_home_map {
         height: 50vh;
         width: 100vw;
     }
 
+    /*
+        map container
+     */
     #init_map {
         margin-bottom: 200px;
     }
 
+    /*
+        main element at the top of page
+        to be larger on mobile devices
+     */
     .haco-main {
-        padding: 220px 0;
+        overflow-x: hidden;
+        padding: 80px 0 120px 0;
         background-color: #2B2D42;
     }
 
     .haco-title {
         max-width: 100%;
-        height: auto;
-        font-size: 12rem;
+        font-size: 7rem;
         text-align: center;
         color: #EF233C;
     }
 
+    /*
+        navigation banner options sign in or register not displayed
+        on mobile as they will appear in the dropdown menu
+     */
     .nb-opts {
         display: none;
     }
 
+     /*
+        fill the mobile screen with the map once
+     */
+
     #haco_home_map {
-        margin: 50px 0;
         width: 100%;
     }
 
-    .map {
-        width: 100%;
+    /*
+        hide website navigation when rendering mobile
+     */
+    .haco-nav {
+        display: none;
     }
 
+    /*
+        image refinements for mobile
+     */
     .haco-title img {
-        width: 25%;
+        width: 30%;
         height: auto;
         margin-bottom: 15px;
     }
 
-    #haco_nav_m button {
-        padding: 50px;
+    /*
+        navbar-custom Works with the entire mobile nav class
+        as a unit
+     */
+    .navbar-custom {
+        background-color: #2B2D42;
+        padding: 20px 20px;
+    }
+
+    /*
+        list and anchor items within
+     */
+    .navbar-custom li a {
+        font-size: 2rem;
+        text-decoration: none;
+        color: #EF233C;
+
+    }
+
+    .btn-label {
+        font-size: 2rem;
+    }
+
+    /*
+        anchor and icon hovering
+     */
+    .navbar-custom a:hover {
+        color: #2B2D42;
+    }
+
+    /*
+        icon active (clicked)
+     */
+    .navbar-custom i:active {
+        color: #EF233C;
+    }
+
+    .dropdown-divider {
+        color: #EF233C;
+    }
+
+    .acc {
+        color: #edae49;
+    }
+
+    /*
+        button element
+     */
+    #h_button {
+        background-color: #2B2D42;
+        border: none;
+    }
+
+     /*
+        rotation for icon on click
+      */
+    .transcon {
+        -moz-transition: transform 0.7s;
+        -webkit-transition: transform 0.7s;
+        transition: transform 0.7s;
+    }
+
+    .transcon.down{
+        -moz-transform: rotate(90deg);
+        -webkit-transform: rotate(90deg);
+        transform: rotate(90deg);
+    }
+
+    /*
+        contains the "button", the <i> element (icon)
+     */
+    .btn-label {
+        color: #EF233C;
     }
 
 }
 
 /*
+    X-small screens and
+    high pixel-density resolutions i.e. iPhone & Samsung
+ */
+
+/*
     Media - Medium Screens i.e. tablets, lanscape mobiles
  */
-@media only screen and (min-width: 768px){
-
-}
 
 /*
     Media - Large Screens
@@ -107,7 +206,7 @@ a, a:hover{
     .haco-title {
         color: #EF233C;
         padding: 2rem;
-        font-size: 4rem;
+        font-size: 1rem;
     }
 
     .haco-nav {
@@ -117,6 +216,15 @@ a, a:hover{
         font-size: 1.25rem;
         padding: 1rem;
         border-radius: 0 0 25px 25px;
+    }
+
+    .haco-title img {
+        width: 300px;
+        height: auto;
+    }
+
+    .haco-nav li {
+        display: inline;
     }
 
     #nav_collap_container, #haco_nav_m {
@@ -129,17 +237,6 @@ a, a:hover{
 
     .nb-opts {
         display: block;
-        padding-top: 1.5rem;
-    }
-
-    .nb-opts a {
-        color: #edae49;
-    }
-
-    .haco-title img {
-        margin-bottom: 5px;
-        margin-left: 2rem;
-        vertical-align: center;
     }
 
     /*
