@@ -1,5 +1,5 @@
 from django.shortcuts import render
-import requests
+from events.models import Event
 
 
 def weather(request):
@@ -12,7 +12,22 @@ def weather(request):
 
 
 def home(response):
-    return render(response, 'hacoweb/index.html')
+    from json import dumps
+    # Collects days events when gathered
+    latest_events = Event.objects.filter(confidence__gte=70)
+    # Create a list
+    event_list = [le.serialize() for le in latest_events]
+    # Dictionary
+    event_dict = {
+        "type": "FeatureCollection",
+        "features": event_list
+    }
+    # Serialize
+    event_json = dumps(event_dict)
+    # Context variable
+    context = {'latest_events': event_json}
+
+    return render(response, 'hacoweb/index.html', context)
 
 
 def glossary(response):

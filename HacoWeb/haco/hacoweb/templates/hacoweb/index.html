@@ -1,6 +1,5 @@
 {% extends 'hacoweb/core.html' %}
 {% load static %}
-{% load leaflet_tags %}
 
 <head>
     <title>{% block title %}Haco | Wildfire Management{% endblock %}</title>
@@ -11,20 +10,22 @@
     {% block content %}
 
         <div id="init_map">
-            <!-- Leaflet -->
-            {% leaflet_map "haco_home_map" %}
         </div>
 
-        <!-- Scripting -->
-        <script>
+        <script type="text/javascript">
+            window.addEventListener('load', (e) => {
+                let latlng; // used to update coordinates as they change
+                let markers = []; // will store markers
 
-            window.addEventListener("map:init", (e) => {
-                // Map Reference
-                let homeMap = e.detail.map;
-                let latlng; // will be used to update coordinates as map state changes
-                // Locates user and sets the view
-                homeMap.locate({setView: true, setZoom: 300})
-                .on('locationfound', (e) => { // on location found begin drawing marker
+                // init map
+                let map = L.map('init_map', {
+                    zoom: 13,
+                    dragging: !L.Browser.mobile,
+                    tap: !L.Browser.mobile,
+                    canvas: L.canvas()
+
+                }).locate({setView: true, setZoom: 300})
+                .on('locationfound', (e)=> {
                     let marker = L.marker([e.latitude, e.longitude], {
                         maxZoom: 18,
                         tileSize: 512,
@@ -40,24 +41,69 @@
                         marker.openPopup();
                         circle.remove();
                     })
-                    .bindPopup('Lat: ' + e.latitude + ', Lon: '+ e.longitude)
-                    let circle = L.circle([e.latitude, e.longitude], e.accuracy/2, {
+                    .bindPopup('Lat: ' + e.latitude + ', Lon: ' + e.longitude)
+
+                    let circle = L.circle([e.latitude, e.longitude], e.accuracy / 2, {
                         weight: 1,
                         color: '#b6e0e2',
                         fillColor: '#CACACA',
                         fillOpacity: 0.2
-                    });
-                    // Add layers (marker/circle) to the map
-                    homeMap.addLayer(marker);
-                    homeMap.addLayer(circle);
-                    // Open popup when location found
+                    })
+                    // Add the marker/circle to the map
+                    map.addLayer(marker);
+                    map.addLayer(circle);
+                    // Open the popup
                     marker.openPopup();
                 })
+                // Usually permission is revoked if this is caused...
                 .on('locationerror', (e) => {
-                    console.log(e);
+                    console.log('Location permission revoked: ' + (e));
                 })
-            });
-        </script>
 
+                L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGVhbjE5OTYiLCJhIjoiY2tsbDYyNzFqMm5idDJxcDd5cjY2bTAwdSJ9.n2dX9LFuOIujqKaPJUJK2Q', {
+                    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                    maxZoom: 18,
+                    id: 'mapbox/streets-v11',
+                    tileSize: 512,
+                    zoomOffset: -1,
+                    accessToken: 'pk.eyJ1IjoiZGVhbjE5OTYiLCJhIjoiY2tsbDYyNzFqMm5idDJxcDd5cjY2bTAwdSJ9.n2dX9LFuOIujqKaPJUJK2Q'
+                }).addTo(map);
+
+                let raw_data = '{{ latest_events|escapejs }}';
+                let data = JSON.parse(raw_data);
+
+                // GeoJSON Map styling
+                let geoJSONMarkerOpts = {
+                    fillColor: '#EF233C',
+                    color: '#EF233C',
+                    weight: 1,
+                    opacity: 1,
+                    fillOpacity: 0.8
+                };
+
+                L.geoJSON(data, {
+                    onEachFeature: function (feature, layer) {
+                        layer.bindPopup(
+                            "<p class='event-desc'>" + "Bright_ti4: " + feature.properties.Bright_ti4 + "</p>" +
+                            "<p class='event-desc'>" + "Scan: " + feature.properties.Scan + "</p>" +
+                            "<p class='event-desc'>" + "Track: " + feature.properties.Track + "</p>" +
+                            "<p class='event-desc'>" + "Date Acquired: " + feature.properties.Acq_date + "</p>" +
+                            "<p class='event-desc'>" + "Time Acquired: " + feature.properties.Acq_time + "</p>" +
+                            "<p class='event-desc'>" + "Satellite: " + feature.properties.Satellite + "</p>" +
+                            "<p class='event-desc'>" + "Confidence: " + feature.properties.Confidence + "</p>" +
+                            "<p class='event-desc'>" + "Version: " + feature.properties.Version + "</p>" +
+                            "<p class='event-desc'>" + "Bright_ti5: " + feature.properties.Bright_ti5 + "</p>" +
+                            "<p class='event-desc'>" + "Frp: " + feature.properties.Frp + "</p>" +
+                            "<p class='event-desc'>" + "Daynight: " + feature.properties.Daynight + "</p>" +
+                            "<p class='event-desc'>" + "Resolution: " + feature.properties.Resolution + "</p>"
+                        );
+                    },
+                    pointToLayer: function(feature, latlng) {
+                        return L.circleMarker(latlng, geoJSONMarkerOpts);
+                    }
+                }).addTo(map);
+            });
+
+        </script>
     {% endblock %}
 </body>

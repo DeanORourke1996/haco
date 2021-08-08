@@ -1,0 +1,17 @@
+{
+  "name": "hacoweb",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "webpack": "webpack"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@pixi/loaders": "^6.1.1",
+    "leaflet-pixi-overlay": "^1.8.2",
+    "pixi.js": "^6.1.1"
+  }
+}

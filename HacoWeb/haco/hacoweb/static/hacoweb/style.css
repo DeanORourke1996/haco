@@ -35,6 +35,17 @@ a, a:hover{
     Media - Small Screens
  */
 @media only screen and (min-width: 250px){
+
+    body {
+        padding: 0;
+        margin: 0;
+    }
+
+    html, body, #init_map {
+        height: 100%;
+        width: 100vw;
+    }
+
     /*
         remove blue visited on anchor tags after clicked
      */
@@ -45,14 +56,6 @@ a, a:hover{
 
     /*
         initialises the map and prepares the html and body
-     */
-    #init_map, #haco_home_map {
-        height: 50vh;
-        width: 100vw;
-    }
-
-    /*
-        map container
      */
     #init_map {
         margin-bottom: 200px;
@@ -207,7 +210,13 @@ a, a:hover{
         color: #EF233C;
     }
 
+    .haco-title img {
+        width: 64px;
+        height: auto;
+    }
+
     .haco-title {
+        width: auto;
         color: #EF233C;
         padding: 2rem;
         font-size: 4rem;
@@ -220,6 +229,10 @@ a, a:hover{
         font-size: 1.25rem;
         padding: 1rem;
         border-radius: 0 0 25px 25px;
+    }
+
+    .row>* {
+        width: auto;
     }
 
     #nav_collap_container, #haco_nav_m {
@@ -243,27 +256,17 @@ a, a:hover{
         color: #edae49;
     }
 
-    .haco-title img {
-        margin-bottom: 5px;
-        margin-left: 2rem;
-        vertical-align: center;
-    }
-
     /*
       MAP STYLING
      */
-    #haco_home_map {
-        margin: 5% auto;
-        width: 80%;
-        height: 600px;
+    #init_map {
+        margin-top: 40px;
+        height: 450px;
+        width: 100%;
     }
 }
 
 /* Globals */
-.haco-nav a:first-of-type {
-    padding-left: 1rem;
-}
-
 .haco-nav a {
     padding: 1rem;
     border-right: 0.15pc solid #edae49;
