@@ -13,7 +13,7 @@ class Event(models.Model):
     acq_date = models.CharField(max_length=255)
     acq_time = models.CharField(max_length=255)
     satellite = models.CharField(max_length=100)
-    confidence = models.IntegerField()
+    confidence = models.CharField(max_length=50)
     version = models.CharField(max_length=100)
     bright_ti5 = models.FloatField()
     frp = models.FloatField()

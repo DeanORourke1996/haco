@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from events.models import Event
+import datetime
 
 
 def weather(request):
@@ -14,7 +15,7 @@ def weather(request):
 def home(response):
     from json import dumps
     # Collects days events when gathered
-    latest_events = Event.objects.filter(confidence__gte=70)
+    latest_events = Event.objects.filter(acq_date=datetime.date.today())
     # Create a list
     event_list = [le.serialize() for le in latest_events]
     # Dictionary

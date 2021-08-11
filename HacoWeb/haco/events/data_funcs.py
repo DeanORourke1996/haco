@@ -1,4 +1,5 @@
 # Use requests for NASA archives
+from crontab import CronTab
 import requests
 import datetime
 from help_scripts.global_funcs import get_julian_date, get_home_dir, get_nasa_key, dpd_lon
@@ -102,12 +103,21 @@ def pre_db_process_data(event, *t):
     # Cast to floats for referential integrity
     lat = float(event[0].lat)
     lon = float(event[0].lon)
+    confidence = event[0].confidence
+    today = datetime.datetime.today()  # Todays date for comparing events in SQL
+    d = datetime.timedelta(days=2)  # Change delta for n-days-ago
+    ndays = today - d
 
+    # Event can be skipped immediately if event confidence is not high
+    if confidence.isnumeric() and int(confidence) < 70:
+        return 0
+    elif confidence != "high":
+        return 0
     # Define default thresholds
     try:
         if not t:
             # Default thresholds
-            t = 0.3
+            t = 0.1
 
         # Calculate Distance per Degree
         v_lon_dpd = dpd_lon(lat)  # Expects a latitude and returns a distance per degree (dpd) float val
@@ -126,10 +136,12 @@ def pre_db_process_data(event, *t):
                 'AND (%s+%s)::float8 '
                 'AND lon BETWEEN (%s-%s)::float8 '
                 'AND (%s+%s)::float8 '
+                'AND acq_date::date BETWEEN (%s)'
+                'AND (%s)'
 
                 # Query Parameters
                 , [lat, lat_variance, lat, lat_variance, lon,
-                   lon_variance, lon, lon_variance]
+                   lon_variance, lon, lon_variance, ndays, today]
             )
             # Grab next row
             row = c.fetchone()
@@ -140,3 +152,4 @@ def pre_db_process_data(event, *t):
 
     except ValueError as e:
         raise ValueError(f'Value passed to fuction (dpd_lon()) invalid {e}')
+
