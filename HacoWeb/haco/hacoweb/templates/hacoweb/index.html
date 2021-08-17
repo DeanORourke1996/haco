@@ -72,14 +72,13 @@
                 let raw_data = '{{ latest_events|escapejs }}';
                 let data = JSON.parse(raw_data);
 
-                // GeoJSON Map styling
-                let geoJSONMarkerOpts = {
-                    fillColor: '#EF233C',
-                    color: '#EF233C',
-                    weight: 1,
-                    opacity: 1,
-                    fillOpacity: 0.8
-                };
+                // Custom Icon
+                let hacoIcon = L.icon({
+                    iconUrl: '{% static 'hacoweb/img/haco.svg' %}',
+                    iconSize: [37,37],
+                    iconAnchor: [15, 37],
+                    popupAnchor: [0, -28]
+                });
 
                 L.geoJSON(data, {
                     onEachFeature: function (feature, layer) {
@@ -99,7 +98,7 @@
                         );
                     },
                     pointToLayer: function(feature, latlng) {
-                        return L.circleMarker(latlng, geoJSONMarkerOpts);
+                        return L.marker(latlng, {icon: hacoIcon});
                     }
                 }).addTo(map);
             });

@@ -1,3 +1,6 @@
 nasa_app_bearer.txt
 .coverage
 /local_data/
+events.log
+load_data_cron.py
+fetch_data_cron.py

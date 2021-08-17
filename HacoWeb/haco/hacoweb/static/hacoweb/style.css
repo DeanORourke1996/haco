@@ -89,10 +89,28 @@ a, a:hover{
         padding: 2px 0;
     }
 
-    .auth-form input {
-        margin: 0 auto;
-        width: 50%;
+    .auth-form {
+        margin-top: 50px;
+        font-size: 2rem;
     }
+
+    .auth-form input {
+        font-size: 2rem;
+        margin: 20px auto;
+        width: 50%;
+        height: 70px;
+    }
+
+    .auth-form legend {
+        font-size: 2.5rem;
+    }
+
+    .auth-btn button {
+        margin: 20px 0;
+        font-size: 2rem;
+    }
+
+
 
     /*
         navigation banner options sign in or register not displayed

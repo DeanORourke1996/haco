@@ -104,7 +104,7 @@ def pre_db_process_data(event, *t):
     lat = float(event[0].lat)
     lon = float(event[0].lon)
     confidence = event[0].confidence
-    today = datetime.datetime.today()  # Todays date for comparing events in SQL
+    today = datetime.date.today()  # Todays date for comparing events in SQL
     d = datetime.timedelta(days=2)  # Change delta for n-days-ago
     ndays = today - d
 
@@ -117,7 +117,7 @@ def pre_db_process_data(event, *t):
     try:
         if not t:
             # Default thresholds
-            t = 0.1
+            t = 0.15
 
         # Calculate Distance per Degree
         v_lon_dpd = dpd_lon(lat)  # Expects a latitude and returns a distance per degree (dpd) float val
@@ -136,7 +136,7 @@ def pre_db_process_data(event, *t):
                 'AND (%s+%s)::float8 '
                 'AND lon BETWEEN (%s-%s)::float8 '
                 'AND (%s+%s)::float8 '
-                'AND acq_date::date BETWEEN (%s)'
+                'AND acq_date::date NOT BETWEEN (%s)'
                 'AND (%s)'
 
                 # Query Parameters
