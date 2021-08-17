@@ -1,9 +1,15 @@
 # Use requests for NASA archives
+from crontab import CronTab
 import requests
 import datetime
-import pandas as pd
 from help_scripts.global_funcs import get_julian_date, get_home_dir, get_nasa_key, dpd_lon
 from django.db import connection
+import pandas as pd
+
+
+def reverse_geo():
+    df_m_data = pd.read_csv(get_home_dir() + "/local_data/MODIS_C6_1_DATA_new.csv")
+    df_v_data = pd.read_csv(get_home_dir() + "/local_data/VIIRS_C6_DATA_new.csv")
 
 
 def geometa_fetch():
@@ -27,8 +33,8 @@ def viirs_record_fetch():
         "Authorization": f"Bearer {key}"
     }
 
-    url = "https://nrt3.modaps.eosdis.nasa.gov/api/v2/content" \
-          "/archives/FIRMS/suomi-npp-viirs-c2/Global/SUOMI_VIIRS_C2_Global_VNP14IMGTDL_NRT_"
+    url = "https://nrt3.modaps.eosdis.nasa.gov/api/v2/content/archives/FIRMS/noaa-20-viirs-c2/Global" \
+          "/J1_VIIRS_C2_Global_VJ114IMGTDL_NRT_"
     date = datetime.datetime.today().strftime('%Y-%m-%d')
     # Get today's julian date
     today_julian = get_julian_date(date)
@@ -55,8 +61,8 @@ def modis_record_fetch():
           "/archives/FIRMS/modis-c6.1/Global/MODIS_C6_1_Global_MCD14DL_NRT_"
     date = datetime.datetime.today().strftime('%Y-%m-%d')
     # Get a Julian date
-    yesterday_julian = get_julian_date(date)  # MODIS only has data for the previous day's events
-    url += str(yesterday_julian)
+    today_julian = get_julian_date(date)  # MODIS only has data for the previous day's events
+    url += str(today_julian)
     # Append .txt to string as formatted in archive
     url += str(".txt")
     r = requests.get(url, headers=headers)
@@ -72,14 +78,14 @@ def write_to_local(data, satellite):
     if satellite == "modis":
         # Function call to fetch new data
         file = get_home_dir()  # Get directory
-        file += '/data/MODIS_C6_1_DATA_new.csv'  # Append new String to directory
-        with open(file, mode='w', ) as f:
+        file += '/local_data/MODIS_C6_1_DATA_new.csv'  # Append new String to directory
+        with open(file, mode='w+', ) as f:
             f.write(data)  # Write data to new file using Write mode which overwrites whatever is there already
     elif satellite == "viirs":
         # Function call to fetch new data
         file = get_home_dir()  # Get directory
-        file += '/data/VIIRS_C6_DATA_new.csv'  # Append new String to directory
-        with open(file, mode='w', ) as f:
+        file += '/local_data/VIIRS_C6_DATA_new.csv'  # Append new String to directory
+        with open(file, mode='w+', ) as f:
             f.write(data)  # Write data to new file using Write mode which overwrites whatever is there already
 
 
@@ -97,12 +103,21 @@ def pre_db_process_data(event, *t):
     # Cast to floats for referential integrity
     lat = float(event[0].lat)
     lon = float(event[0].lon)
+    confidence = event[0].confidence
+    today = datetime.date.today()  # Todays date for comparing events in SQL
+    d = datetime.timedelta(days=2)  # Change delta for n-days-ago
+    ndays = today - d
 
+    # Event can be skipped immediately if event confidence is not high
+    if confidence.isnumeric() and int(confidence) < 70:
+        return 0
+    elif confidence != "high":
+        return 0
     # Define default thresholds
     try:
         if not t:
             # Default thresholds
-            t = 0.3
+            t = 0.15
 
         # Calculate Distance per Degree
         v_lon_dpd = dpd_lon(lat)  # Expects a latitude and returns a distance per degree (dpd) float val
@@ -121,10 +136,12 @@ def pre_db_process_data(event, *t):
                 'AND (%s+%s)::float8 '
                 'AND lon BETWEEN (%s-%s)::float8 '
                 'AND (%s+%s)::float8 '
+                'AND acq_date::date NOT BETWEEN (%s)'
+                'AND (%s)'
 
                 # Query Parameters
                 , [lat, lat_variance, lat, lat_variance, lon,
-                   lon_variance, lon, lon_variance]
+                   lon_variance, lon, lon_variance, ndays, today]
             )
             # Grab next row
             row = c.fetchone()
@@ -135,3 +152,4 @@ def pre_db_process_data(event, *t):
 
     except ValueError as e:
         raise ValueError(f'Value passed to fuction (dpd_lon()) invalid {e}')
+

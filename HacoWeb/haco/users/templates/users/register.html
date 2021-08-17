@@ -6,7 +6,7 @@
 
 {% block content %}
     <div class="container-fluid">
-        <div class="content-section col-md-3 pt-md-3">
+        <div class="auth-form content-section col-sm-12 col-lg-12 pt-md-3">
             <!-- Registration form provided by forms.py -->
             <form method="POST" autocomplete="off">
                 {% csrf_token %}
@@ -15,7 +15,7 @@
                     {{ form|crispy }}
                 </fieldset>
 
-                <div class="form-group">
+                <div class="auth-btn form-group">
                     <button class="btn btn-outline-info" type="submit">Sign Up</button>
                 </div>
             </form>

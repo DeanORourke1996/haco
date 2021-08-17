@@ -1,11 +1,11 @@
 #!/Users/dean/haco/HacoWeb/haco/venv/bin/python
 
 import sys
-# import osgeo.utils.gdal_polygonize as a convenience to use as a script
-from osgeo.utils.gdal_polygonize import *  # noqa
-from osgeo.utils.gdal_polygonize import main
+# import osgeo_utils.gdal_polygonize as a convenience to use as a script
+from osgeo_utils.gdal_polygonize import *  # noqa
+from osgeo_utils.gdal_polygonize import main
 from osgeo.gdal import deprecation_warn
 
 
-deprecation_warn('gdal_polygonize', 'utils')
+deprecation_warn('gdal_polygonize')
 sys.exit(main(sys.argv))

@@ -9,29 +9,29 @@ def load_data(hard, mode):
     file = ""
     if mode == "modis":
         # Set filepath
-        file = get_home_dir() + '/data/MODIS_C6_DATA_new.csv'
+        file = get_home_dir() + '/local_data/MODIS_C6_1_DATA_new.csv'
     elif mode == "viirs":
         # Set filepath
-        file = get_home_dir() + '/data/VIIRS_DATA_new.csv'
+        file = get_home_dir() + '/local_data/VIIRS_C6_DATA_new.csv'
     count_inserts = 0
     with open(file) as f:
         reader = csv.reader(f)
         next(reader, None)
         for record in reader:
             event = Event.objects.get_or_create(
-                lat=record[1],
-                lon=record[2],
-                bright_ti4=record[3],
-                scan=record[4],
-                track=record[5],
-                acq_date=record[6],
-                acq_time=record[7],
-                satellite=record[8],
-                confidence=record[9],
-                version=record[10],
-                bright_ti5=record[11],
-                frp=record[12],
-                daynight=record[13],
+                lat=record[0],
+                lon=record[1],
+                bright_ti4=record[2],
+                scan=record[3],
+                track=record[4],
+                acq_date=record[5],
+                acq_time=record[6],
+                satellite=record[7],
+                confidence=record[8],
+                version=record[9],
+                bright_ti5=record[10],
+                frp=record[11],
+                daynight=record[12],
                 resolution=mode
             )
             if not hard:

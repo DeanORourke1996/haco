@@ -15,7 +15,6 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
@@ -25,7 +24,10 @@ SECRET_KEY = 'rw++8k7jwx*x!-jyaf(1hgudl$4_)%2hc9rmb87@n@c+jllir='
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+    'bc67c927fc24.ngrok.io'
+]
 
 # Application definition
 INSTALLED_APPS = [
@@ -39,8 +41,7 @@ INSTALLED_APPS = [
     'hacoweb.apps.HacowebConfig',
     'users',
     'events',
-    'crispy_forms',
-    'leaflet'
+    'crispy_forms'
 ]
 
 MIDDLEWARE = [
@@ -108,13 +109,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-LEAFLET_CONFIG = {
-    'DEFAULT_CENTER': (53.3498, 6.2603),
-    'DEFAULT_ZOOM': 5,
-    'MIN_ZOOM': 3,
-    'MAX_ZOOM': 18,
-    'DEFAULT_PRECISION': 6,
-}
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 
 AUTH_USER_MODEL = 'users.User'
 
@@ -139,8 +134,5 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-    'static/dist/'
-]

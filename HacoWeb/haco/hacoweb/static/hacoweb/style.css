@@ -1,67 +1,321 @@
 /*
+    FONT NOTES:
+
+    FOR 'OSWALD'
+    WEIGHTS AVAILABLE ARE: 200, 400, 700
+
+ */
+
+/*
     GENERAL/CORE STYLING FOR NAVIGATION BAR, HEADING AND FOOTING
  */
 
-a:hover {
+* {
+    font-family: 'Oswald', sans-serif;
+}
+
+html {
+    font-size: 16px;
+}
+
+body {
+    background-color: #b6e0e2;
+}
+
+a, a:hover{
     text-decoration: none;
     color: inherit;
 }
 
-.haco-nav {
-    background-color: #EDF2F4;
-    color: #EF233C;
-}
+/*
+    MEDIA QUERIES
+ */
 
-.haco-nav a {
-    color: #EF233C;
-}
+/*
+    Media - Small Screens
+ */
+@media only screen and (min-width: 250px){
 
-.haco-nav a:link {
-    text-decoration: none;
-}
+    /*
+         Prepares the body for the map
+     */
+    body {
+        padding: 0;
+        margin: 0;
+    }
 
-.haco-nav a:hover {
-    color: #D90429;
-    font-weight: lighter;
-}
+    /*
+        Prepares the map on the page
+     */
+    html, body, #init_map {
+        height: 100%;
+        width: 100vw;
+    }
 
-.nav-icon {
-    background-color: #2B2D42;
-}
+    /*
+        remove blue visited on anchor tags after clicked
+     */
+    a:visited {
+        color: inherit;
+        text-decoration: none;
+    }
 
-.haco-main {
-    background-color: #2B2D42;
-}
+    /*
+        initialises the map and prepares the html and body
+     */
+    #init_map {
+        margin-bottom: 200px;
+    }
 
-.haco-main a {
-    text-decoration: none;
-}
+    /*
+        main element at the top of page
+        to be larger on mobile devices
+     */
+    .haco-main {
+        overflow-x: hidden;
+        padding: 80px 0 120px 0;
+        background-color: #2B2D42;
+    }
 
-.haco-title {
-    color: #EF233C;
-    font-size: 2.5rem;
-}
+    .haco-title {
+        width: 100%;
+        height: auto;
+        font-size: 7rem;
+        text-align: center;
+        color: #EF233C;
+    }
 
-.nav-auth {
-    margin-left: 75%;
-}
+    .event-desc {
+        padding: 2px 0;
+    }
 
-.nav-auth a {
-    display: inline;
+    .auth-form {
+        margin-top: 50px;
+        font-size: 2rem;
+    }
+
+    .auth-form input {
+        font-size: 2rem;
+        margin: 20px auto;
+        width: 50%;
+        height: 70px;
+    }
+
+    .auth-form legend {
+        font-size: 2.5rem;
+    }
+
+    .auth-btn button {
+        margin: 20px 0;
+        font-size: 2rem;
+    }
+
+
+
+    /*
+        navigation banner options sign in or register not displayed
+        on mobile as they will appear in the dropdown menu
+     */
+    .nb-opts {
+        display: none;
+    }
+
+     /*
+        fill the mobile screen with the map once
+     */
+
+    #haco_home_map {
+        width: 100%;
+    }
+
+    /*
+        hide website navigation when rendering mobile
+     */
+    .haco-nav {
+        display: none;
+    }
+
+    /*
+        image refinements for mobile
+     */
+    .haco-title img {
+        width: 30%;
+        height: auto;
+        margin-bottom: 15px;
+    }
+
+    /*
+        navbar-custom Works with the entire mobile nav class
+        as a unit
+     */
+    .navbar-custom {
+        background-color: #2B2D42;
+        padding: 20px 20px;
+    }
+
+    /*
+        list and anchor items within
+     */
+    .navbar-custom li a {
+        font-size: 2rem;
+        text-decoration: none;
+        color: #EF233C;
+
+    }
+
+    /*
+        Button font
+     */
+    .btn-label {
+        font-size: 2rem;
+    }
+
+    /*
+        anchor and icon hovering
+     */
+    .navbar-custom a:hover {
+        color: #2B2D42;
+    }
+
+    /*
+        icon active (clicked)
+     */
+    .navbar-custom i:active {
+        color: #EF233C;
+    }
+
+    .dropdown-divider {
+        color: #EF233C;
+    }
+
+    .acc {
+        color: #edae49;
+    }
+
+    /*
+        button element
+     */
+    #h_button {
+        background-color: #2B2D42;
+        border: none;
+    }
+
+     /*
+        rotation for icon on click
+      */
+    .transcon {
+        -moz-transition: transform 0.7s;
+        -webkit-transition: transform 0.7s;
+        transition: transform 0.7s;
+    }
+
+    .transcon.down{
+        -moz-transform: rotate(90deg);
+        -webkit-transform: rotate(90deg);
+        transform: rotate(90deg);
+    }
+
+    /*
+        contains the "button", the <i> element (icon)
+     */
+    .btn-label {
+        color: #EF233C;
+    }
+
 }
 
 /*
-  MAP STYLING
+    X-small screens and
+    high pixel-density resolutions i.e. iPhone & Samsung
  */
 
-#haco_home_map {
-    margin: 5% auto;
-    width: 70%;
-    height: 600px;
+/*
+    Media - Medium Screens i.e. tablets, lanscape mobiles
+ */
+@media only screen and (min-width: 768px){
+
 }
 
-#login-form {
-    margin: 200px;
+/*
+    Media - Large Screens
+ */
+@media only screen and (min-width: 992px){
+    .haco-main {
+        padding: 10px;
+        background-color: #2B2D42;
+        color: #EF233C;
+    }
+
+    .haco-title img {
+        width: 64px;
+        height: auto;
+    }
+
+    .haco-title {
+        width: auto;
+        color: #EF233C;
+        padding: 2rem;
+        font-size: 4rem;
+    }
+
+    .haco-nav {
+        display: block;
+        background-color: #8d99ae;
+        color: #edae49;
+        font-size: 1.25rem;
+        padding: 1rem;
+        border-radius: 0 0 25px 25px;
+    }
+
+    .event-desc p {
+        padding: 0.5px 0;
+    }
+
+    .row>* {
+        width: auto;
+    }
+
+    #nav_collap_container, #haco_nav_m {
+        display: none;
+    }
+
+    .nav-icon {
+        background-color: #2B2D42;
+    }
+
+    .navbar-custom {
+        display: none;
+    }
+
+    .nb-opts {
+        display: block;
+        padding-top: 1.5rem;
+    }
+
+    .nb-opts a {
+        color: #edae49;
+    }
+
+    /*
+      MAP STYLING
+     */
+    #init_map {
+        margin-top: 40px;
+        height: 600px;
+        width: 100%;
+    }
+}
+
+/* Globals */
+.haco-nav a {
+    padding: 1rem;
+    border-right: 0.15pc solid #edae49;
+    color: #edae49;
+}
+
+.haco-nav a:hover {
+    text-decoration: none;
+    color: #EF233C;
 }
 
 
