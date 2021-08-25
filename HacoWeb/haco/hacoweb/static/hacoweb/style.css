@@ -347,6 +347,7 @@ a, a:hover{
     }
 
     #wind_indicator {
+        color: #EF233C;
         margin: 20px 0 20px 100px;
         font-size: 7rem;
         -moz-transition: transform 0.7s;

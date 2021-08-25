@@ -14,9 +14,10 @@
             <h3>Weather Information</h3>
             <i id="wind_indicator" class="fa fa-angle-double-up"></i>
             <span class="weather-info">
-                <p id="dynamic">Wind moving at 53 degress, North Easterly direction</p>
-                <p id="speed">Wind Speed: 3kts</p>
-                <p id="temp">Temperature: 17 degrees (C)</p>
+                <p id="dynamic"></p>
+                <p id="speed"></p>
+                <p id="temp"></p>
+                <small id="time"></small>
             </span>
         </div>
 
@@ -27,15 +28,19 @@
 
         <script type="text/javascript">
 
+            // 1 min in milliseconds = 60000
+
             // Configures the Compass Element with Wind and Weather Information
             function initCompass(degrees, speed, temp) {
                 // Rotates the Wind Arrow according to Degrees passed to function
                 $('#wind_indicator').css({transform: 'rotate('+degrees+'deg)', '-moz-transform:': 'rotate('+degrees+'deg)', '-webkit-transform': 'rotate('+degrees+'deg)'});
 
                 // Local Variables
-                let celsius = temp - 273.15;
+                let celsius = (temp - 273.15).toFixed(1);
+                let d = new Date();
                 let direction;
 
+                // Conditional for descriptive text direction
                 if(degrees > 0 && degrees <=45) {
                     direction = 'North Easterly direction';
                 } else if(degrees > 45 && degrees <= 90) {
@@ -55,19 +60,28 @@
                 }
 
                 // Remove Old Info
-                let elInfo = $('#dynamic').fadeOut();
-                let elSpeed = $('#speed').fadeOut();
-                let elTemp = $('#temp').fadeOut();
+                let elInfo = $('#dynamic');
+                let elSpeed = $('#speed');
+                let elTemp = $('#temp');
+                let elTime = $('#time');
+
+                // Check for values
+                if(elInfo.val() && elSpeed.val() && elTemp.val()){
+                    elInfo.fadeOut();
+                    elSpeed.fadeOut();
+                    elTemp.fadeOut();
+                }
 
                 // Redefine Element's Value
-                elInfo.val('Wind moving at '+ degrees +' degrees, ' + direction);
-                elSpeed.val('Wind Speed: '+ speed + 'kts');
-                elTemp.val('Temperature: '+ celsius +' degrees (C)');
+                elInfo.text('Wind moving at '+ degrees +' degrees, ' + direction);
+                elSpeed.text('Wind Speed: '+ speed + 'kts');
+                elTemp.text('Temperature: '+ celsius +' degrees (C)');
+                elTime.text('Last updated at: '+ d.toLocaleTimeString());
 
                 // Display new Information
-                elInfo = $('#dynamic').fadeIn();
-                elSpeed = $('#speed').fadeIn();
-                elTemp = $('#temp').fadeIn();
+                elInfo.fadeIn();
+                elSpeed.fadeIn();
+                elTemp.fadeIn();
             };
 
 
@@ -117,17 +131,17 @@
                 marker.openPopup();
 
                 // Call to OpenWeather API
-                {% comment %}let weather = fetch('https://api.openweathermap.org/data/2.5/weather?lat='+e.latitude+'&lon='+e.longitude+'&appid='+OSMAPIKey).then((response) => {
+                let weather = fetch('https://api.openweathermap.org/data/2.5/weather?lat='+e.latitude+'&lon='+e.longitude+'&appid='+OSMAPIKey).then((response) => {
                     console.log('resolved', response)
                     return response.json();
                 }).then(data => {
-                    initCompass(data.wind.deg);
+                    initCompass(data.wind.deg, data.wind.speed, data.main.temp);
                     console.log(data);
                 }).catch((err) => {
                     console.log('rejected', err);
-                });{% endcomment %}
+                });
 
-                initCompass(53);
+                //initCompass(53, 3.6, 276.4);
 
 
             })
