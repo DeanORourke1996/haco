@@ -35,15 +35,6 @@ a, a:hover{
     Media - Small Screens
  */
 @media only screen and (min-width: 250px){
-    .wind-meter {
-        background-color: inherit;
-        background-size: cover;
-        margin: 100px;
-    }
-
-    .wind-meter img {
-
-    }
 
     /*
          Prepares the body for the map
@@ -273,7 +264,6 @@ a, a:hover{
         color: #edae49;
         font-size: 1.25rem;
         padding: 1rem;
-        border-radius: 0 0 25px 25px;
     }
 
     .event-desc p {
@@ -340,10 +330,28 @@ a, a:hover{
         color: #edae49;
     }
 
+    .wind-meter {
+        color: #2B2D42;
+        width: 100%;
+        background-color: #edae49;
+        padding: 20px;
+        margin: 0 auto;
+    }
+
+    .wind-meter h3 {
+        margin-bottom: 10px;
+    }
+
+    .wind-meter p {
+        line-height: 2px;
+    }
+
     #wind_indicator {
-        color: transparent;
-        width: 40px;
-        height: 40px;
+        margin: 20px 0 20px 100px;
+        font-size: 7rem;
+        -moz-transition: transform 0.7s;
+        -webkit-transition: transform 0.7s;
+        transition: transform 0.7s;
     }
 
     /*
