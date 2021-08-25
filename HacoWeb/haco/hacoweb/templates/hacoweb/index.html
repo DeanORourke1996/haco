@@ -28,7 +28,24 @@
 
         <script type="text/javascript">
 
-            // 1 min in milliseconds = 60000
+            let OSMAPIKey = "518b54b7cfd7c1047999fb4815eab4a5";
+
+            // Async Function for Weather Retrieval on Marker Manipulation
+            const OSMWeatherFetch = async (lat, lng) => {
+                const response = await fetch('https://api.openweathermap.org/data/2.5/weather?lat='+lat+'&lon='+lng+'&appid='+OSMAPIKey);
+                const data = await response.json();
+                // Return the Data
+                return data;
+            }
+
+            // AJAX Callback function requested every 2 minutes
+            function OSMWeatherAPI(url) {
+                $.get(url)
+                .done(function(data){
+                    console.log(data);
+                    initCompass(data.wind.deg, data.wind.speed, data.main.temp);
+                });
+            }
 
             // Configures the Compass Element with Wind and Weather Information
             function initCompass(degrees, speed, temp) {
@@ -87,7 +104,6 @@
 
             let latlng; // used to update coordinates as they change
             let markers = []; // will store markers
-            let OSMAPIKey = "518b54b7cfd7c1047999fb4815eab4a5";
 
             // init map
             let map = L.map('init_map', {
@@ -112,6 +128,14 @@
                     marker.bindPopup('Lat: ' + latlng.lat.toFixed(6) + ', Lon: ' + latlng.lng.toFixed(6));
                     marker.openPopup();
                     circle.remove();
+
+                    // Weather API When Location is Changed...Update Weather
+                    OSMWeatherFetch(latlng.lat, latlng.lng).then(data => {
+                        // Update weather as per location
+                        initCompass(data.wind.deg, data.wind.speed, data.main.temp);
+                    }).catch(err => {
+                        console.log('Error connecting to data host: ', err);
+                    });
                 })
                 // Binds new popup when dragend
                 .bindPopup('Lat: ' + e.latitude + ', Lon: ' + e.longitude)
@@ -130,16 +154,14 @@
                 // Open the popup
                 marker.openPopup();
 
-                // Call to OpenWeather API
-                let weather = fetch('https://api.openweathermap.org/data/2.5/weather?lat='+e.latitude+'&lon='+e.longitude+'&appid='+OSMAPIKey).then((response) => {
-                    console.log('resolved', response)
-                    return response.json();
-                }).then(data => {
-                    initCompass(data.wind.deg, data.wind.speed, data.main.temp);
-                    console.log(data);
-                }).catch((err) => {
-                    console.log('rejected', err);
-                });
+                // Initial Promise to Retrieve Data for Weather
+
+
+                // Interval on Callback Function to Retrieve Updated Weather Information
+                setInterval(function() {
+                    OSMWeatherAPI('https://api.openweathermap.org/data/2.5/weather?lat='+e.latitude+'&lon='+e.longitude+'&appid='+OSMAPIKey);
+                }, 120000);
+
 
                 //initCompass(53, 3.6, 276.4);
 
