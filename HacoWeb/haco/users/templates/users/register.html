@@ -11,7 +11,7 @@
             <form method="POST" autocomplete="off">
                 {% csrf_token %}
                 <fieldset class="form-group">
-                    <legend class="border-bottom mb-4">Join the Haco Community today</legend>
+                    <legend class="border-bottom">Join the Haco Community today</legend>
                     {{ form|crispy }}
                 </fieldset>
 
@@ -20,11 +20,13 @@
                 </div>
             </form>
             <!-- Login link instead -->
-            <div class="border-top pt-4">
-                <small class="text-muted">
-                    Already a Haco  member? <a href="{% url 'login' %}" class="ml-2">Login Instead</a>
-                </small>
-            </div>
+            <footer>
+                <div class="border-top pt-4">
+                    <small class="text-muted">
+                        Already a Haco  member? <a href="{% url 'login' %}" class="alternative_link ml-2">Login Instead</a>
+                    </small>
+                </div>
+            </footer>
         </div>
     </div>
 {% endblock %}

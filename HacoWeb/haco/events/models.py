@@ -19,6 +19,7 @@ class Event(models.Model):
     frp = models.FloatField()
     daynight = models.CharField(max_length=1)
     resolution = models.CharField(max_length=5)
+    is_user_made = models.CharField(max_length=1)
 
     # Constructs a GeoJSON dictionary for use with
     # LeafletJS which needs to be serialized

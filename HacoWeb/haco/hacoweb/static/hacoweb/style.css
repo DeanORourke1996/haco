@@ -35,6 +35,15 @@ a, a:hover{
     Media - Small Screens
  */
 @media only screen and (min-width: 250px){
+    .wind-meter {
+        background-color: inherit;
+        background-size: cover;
+        margin: 100px;
+    }
+
+    .wind-meter img {
+
+    }
 
     /*
          Prepares the body for the map
@@ -271,6 +280,37 @@ a, a:hover{
         padding: 0.5px 0;
     }
 
+    .auth-form {
+        margin-top: 50px;
+        font-size: 1.25rem;
+    }
+
+    .auth-form input {
+        font-size: 1.25rem;
+        margin-left: 50px;
+        width: 50%;
+        height: 40px;
+    }
+
+    .auth-form fieldset {
+        margin-left: 50px;
+        color: #2B2D42;
+    }
+
+    .auth-form legend {
+        font-size: 1.75rem;
+    }
+
+    .auth-btn button {
+        color: #2B2D42;
+        margin: 50px;
+        font-size: 1.25rem;
+    }
+
+    .auth-btn button:hover {
+        background-color: #edae49;
+    }
+
     .row>* {
         width: auto;
     }
@@ -294,6 +334,16 @@ a, a:hover{
 
     .nb-opts a {
         color: #edae49;
+    }
+
+    #alternative_link {
+        color: #edae49;
+    }
+
+    #wind_indicator {
+        color: transparent;
+        width: 40px;
+        height: 40px;
     }
 
     /*

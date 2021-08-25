@@ -9,13 +9,31 @@
     <!-- Main Body -->
     {% block content %}
 
+        <!-- This Canvas is for the Wind Compass -->
+        <img id="wind_indicator" src="{% static 'hacoweb/img/arrow.png' %}" alt="wind indicator">
+
         <div id="init_map">
         </div>
 
         <script type="text/javascript">
+
+            // Async function for calling weather API
+            async function getOWMData(url){
+                const response = await fetch(url);
+
+                return response.json();
+            }
+
+
             window.addEventListener('load', (e) => {
+                function focusCompass(degrees) {
+                    $('#wind_indicator').css('transform','rotate('+degrees+'deg)');
+                };
+
+
                 let latlng; // used to update coordinates as they change
                 let markers = []; // will store markers
+                let OSMAPIKey = "518b54b7cfd7c1047999fb4815eab4a5";
 
                 // init map
                 let map = L.map('init_map', {
@@ -23,7 +41,6 @@
                     dragging: !L.Browser.mobile,
                     tap: !L.Browser.mobile,
                     canvas: L.canvas()
-
                 }).locate({setView: true, setZoom: 300})
                 .on('locationfound', (e)=> {
                     let marker = L.marker([e.latitude, e.longitude], {
@@ -54,6 +71,18 @@
                     map.addLayer(circle);
                     // Open the popup
                     marker.openPopup();
+
+                    // Call to OpenWeather API
+                    let weather = fetch('https://api.openweathermap.org/data/2.5/weather?lat='+e.latitude+'&lon='+e.longitude+'&appid='+OSMAPIKey).then((response) => {
+                        console.log('resolved', response)
+                        return response.json();
+                    }).then(data => {
+                        console.log(data);
+                    }).catch((err) => {
+                        console.log('rejected', err);
+                    });
+
+
                 })
                 // Usually permission is revoked if this is caused...
                 .on('locationerror', (e) => {
@@ -104,5 +133,7 @@
             });
 
         </script>
+
+
     {% endblock %}
 </body>
