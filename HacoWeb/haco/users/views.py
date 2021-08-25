@@ -21,6 +21,8 @@ def user_register(response):
             return redirect('home')
     else:
         form = RegistrationForm()
+        if response.GET.get('auth') == "noauth":
+            messages.warning(response, "Please register first to begin reporting! :)")
 
     return render(response, 'users/register.html', {'form': form})
 

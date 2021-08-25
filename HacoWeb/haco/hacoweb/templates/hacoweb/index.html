@@ -9,100 +9,213 @@
     <!-- Main Body -->
     {% block content %}
 
+        <!-- Wind Compass -->
+        <div class="wind-meter col-lg-12">
+            <h3>Weather Information</h3>
+            <i id="wind_indicator" class="fa fa-angle-double-up"></i>
+            <span class="weather-info">
+                <p id="dynamic"></p>
+                <p id="speed"></p>
+                <p id="temp"></p>
+                <small id="time"></small>
+            </span>
+        </div>
+
+
+        <!-- Map Container -->
         <div id="init_map">
         </div>
 
         <script type="text/javascript">
-            window.addEventListener('load', (e) => {
-                let latlng; // used to update coordinates as they change
-                let markers = []; // will store markers
 
-                // init map
-                let map = L.map('init_map', {
-                    zoom: 13,
-                    dragging: !L.Browser.mobile,
-                    tap: !L.Browser.mobile,
-                    canvas: L.canvas()
+            let OSMAPIKey = "518b54b7cfd7c1047999fb4815eab4a5";
 
-                }).locate({setView: true, setZoom: 300})
-                .on('locationfound', (e)=> {
-                    let marker = L.marker([e.latitude, e.longitude], {
-                        maxZoom: 18,
-                        tileSize: 512,
-                        zoomOffset: -1,
-                        draggable: true,
-                        autoPan: true
-                    })
-                    // after the marker has been dropped, regather coordinates pass them out to global var
-                    .on('dragend', () => {
-                        marker.unbindPopup();
-                        latlng = marker.getLatLng();
-                        marker.bindPopup('Lat: ' + latlng.lat.toFixed(6) + ', Lon: ' + latlng.lng.toFixed(6));
-                        marker.openPopup();
-                        circle.remove();
-                    })
-                    .bindPopup('Lat: ' + e.latitude + ', Lon: ' + e.longitude)
+            // Async Function for Weather Retrieval on Marker Manipulation
+            const OSMWeatherFetch = async (lat, lng) => {
+                const response = await fetch('https://api.openweathermap.org/data/2.5/weather?lat='+lat+'&lon='+lng+'&appid='+OSMAPIKey);
+                const data = await response.json();
+                // Return the Data
+                return data;
+            }
 
-                    let circle = L.circle([e.latitude, e.longitude], e.accuracy / 2, {
-                        weight: 1,
-                        color: '#b6e0e2',
-                        fillColor: '#CACACA',
-                        fillOpacity: 0.2
-                    })
-                    // Add the marker/circle to the map
-                    map.addLayer(marker);
-                    map.addLayer(circle);
-                    // Open the popup
-                    marker.openPopup();
-                })
-                // Usually permission is revoked if this is caused...
-                .on('locationerror', (e) => {
-                    console.log('Location permission revoked: ' + (e));
-                })
+            // AJAX Callback function requested every 2 minutes
+            function OSMWeatherAPI(url) {
+                $.get(url)
+                .done(function(data){
+                    console.log(data);
+                    initCompass(data.wind.deg, data.wind.speed, data.main.temp);
+                });
+            }
 
-                L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGVhbjE5OTYiLCJhIjoiY2tsbDYyNzFqMm5idDJxcDd5cjY2bTAwdSJ9.n2dX9LFuOIujqKaPJUJK2Q', {
-                    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+            // Configures the Compass Element with Wind and Weather Information
+            function initCompass(degrees, speed, temp) {
+                // Rotates the Wind Arrow according to Degrees passed to function
+                $('#wind_indicator').css({transform: 'rotate('+degrees+'deg)', '-moz-transform:': 'rotate('+degrees+'deg)', '-webkit-transform': 'rotate('+degrees+'deg)'});
+
+                // Local Variables
+                let celsius = (temp - 273.15).toFixed(1);
+                let d = new Date();
+                let direction;
+
+                // Conditional for descriptive text direction
+                if(degrees > 0 && degrees <=45) {
+                    direction = 'North Easterly direction';
+                } else if(degrees > 45 && degrees <= 90) {
+                    direction = 'to the East';
+                } else if(degrees > 90 && degrees <= 135) {
+                    direction = 'South Easterly direction';
+                } else if(degrees > 135 && degrees <= 180) {
+                    direction = 'to the South';
+                } else if(degrees > 180 && degrees <= 225) {
+                    direction = 'South Westerly direction';
+                } else if(degrees > 225 && degrees <= 270) {
+                    direction = 'to the West';
+                } else if(degrees > 270 && degrees <= 315) {
+                    direction = 'North Westerly direction';
+                } else {
+                    direction = 'to the North';
+                }
+
+                // Remove Old Info
+                let elInfo = $('#dynamic');
+                let elSpeed = $('#speed');
+                let elTemp = $('#temp');
+                let elTime = $('#time');
+
+                // Check for values
+                if(elInfo.val() && elSpeed.val() && elTemp.val()){
+                    elInfo.fadeOut();
+                    elSpeed.fadeOut();
+                    elTemp.fadeOut();
+                }
+
+                // Redefine Element's Value
+                elInfo.text('Wind moving at '+ degrees +' degrees, ' + direction);
+                elSpeed.text('Wind Speed: '+ speed + 'kts');
+                elTemp.text('Temperature: '+ celsius +' degrees (C)');
+                elTime.text('Last updated at: '+ d.toLocaleTimeString());
+
+                // Display new Information
+                elInfo.fadeIn();
+                elSpeed.fadeIn();
+                elTemp.fadeIn();
+            };
+
+
+            let latlng; // used to update coordinates as they change
+            let markers = []; // will store markers
+
+            // init map
+            let map = L.map('init_map', {
+                zoom: 13,
+                dragging: !L.Browser.mobile,
+                tap: !L.Browser.mobile,
+                canvas: L.canvas()
+            })
+            .locate({setView: true, setZoom: 300})
+            .on('locationfound', (e)=> {
+                let marker = L.marker([e.latitude, e.longitude], {
                     maxZoom: 18,
-                    id: 'mapbox/streets-v11',
                     tileSize: 512,
                     zoomOffset: -1,
-                    accessToken: 'pk.eyJ1IjoiZGVhbjE5OTYiLCJhIjoiY2tsbDYyNzFqMm5idDJxcDd5cjY2bTAwdSJ9.n2dX9LFuOIujqKaPJUJK2Q'
-                }).addTo(map);
+                    draggable: true,
+                    autoPan: true
+                })
+                // after the marker has been dropped, regather coordinates pass them out to global var
+                .on('dragend', () => {
+                    marker.unbindPopup();
+                    latlng = marker.getLatLng();
+                    marker.bindPopup('Lat: ' + latlng.lat.toFixed(6) + ', Lon: ' + latlng.lng.toFixed(6));
+                    marker.openPopup();
+                    circle.remove();
 
-                let raw_data = '{{ latest_events|escapejs }}';
-                let data = JSON.parse(raw_data);
+                    // Weather API When Location is Changed...Update Weather
+                    OSMWeatherFetch(latlng.lat, latlng.lng).then(data => {
+                        // Update weather as per location
+                        initCompass(data.wind.deg, data.wind.speed, data.main.temp);
+                    }).catch(err => {
+                        console.log('Error connecting to data host: ', err);
+                    });
+                })
+                // Binds new popup when dragend
+                .bindPopup('Lat: ' + e.latitude + ', Lon: ' + e.longitude)
 
-                // Custom Icon
-                let hacoIcon = L.icon({
-                    iconUrl: '{% static 'hacoweb/img/haco.svg' %}',
-                    iconSize: [37,37],
-                    iconAnchor: [15, 37],
-                    popupAnchor: [0, -28]
-                });
+                // Create circle on init around user location
+                let circle = L.circle([e.latitude, e.longitude], e.accuracy / 2, {
+                    weight: 1,
+                    color: '#b6e0e2',
+                    fillColor: '#CACACA',
+                    fillOpacity: 0.2
+                })
 
-                L.geoJSON(data, {
-                    onEachFeature: function (feature, layer) {
-                        layer.bindPopup(
-                            "<p class='event-desc'>" + "Bright_ti4: " + feature.properties.Bright_ti4 + "</p>" +
-                            "<p class='event-desc'>" + "Scan: " + feature.properties.Scan + "</p>" +
-                            "<p class='event-desc'>" + "Track: " + feature.properties.Track + "</p>" +
-                            "<p class='event-desc'>" + "Date Acquired: " + feature.properties.Acq_date + "</p>" +
-                            "<p class='event-desc'>" + "Time Acquired: " + feature.properties.Acq_time + "</p>" +
-                            "<p class='event-desc'>" + "Satellite: " + feature.properties.Satellite + "</p>" +
-                            "<p class='event-desc'>" + "Confidence: " + feature.properties.Confidence + "</p>" +
-                            "<p class='event-desc'>" + "Version: " + feature.properties.Version + "</p>" +
-                            "<p class='event-desc'>" + "Bright_ti5: " + feature.properties.Bright_ti5 + "</p>" +
-                            "<p class='event-desc'>" + "Frp: " + feature.properties.Frp + "</p>" +
-                            "<p class='event-desc'>" + "Daynight: " + feature.properties.Daynight + "</p>" +
-                            "<p class='event-desc'>" + "Resolution: " + feature.properties.Resolution + "</p>"
-                        );
-                    },
-                    pointToLayer: function(feature, latlng) {
-                        return L.marker(latlng, {icon: hacoIcon});
-                    }
-                }).addTo(map);
+                // Add the marker/circle to the map
+                map.addLayer(marker);
+                map.addLayer(circle);
+                // Open the popup
+                marker.openPopup();
+
+                // Initial Promise to Retrieve Data for Weather
+
+
+                // Interval on Callback Function to Retrieve Updated Weather Information
+                setInterval(function() {
+                    OSMWeatherAPI('https://api.openweathermap.org/data/2.5/weather?lat='+e.latitude+'&lon='+e.longitude+'&appid='+OSMAPIKey);
+                }, 120000);
+
+
+                //initCompass(53, 3.6, 276.4);
+
+
+            })
+            // Usually permission is revoked if this is caused...
+            .on('locationerror', (e) => {
+                console.log('Location permission revoked: ' + (e));
+            })
+
+            L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGVhbjE5OTYiLCJhIjoiY2tsbDYyNzFqMm5idDJxcDd5cjY2bTAwdSJ9.n2dX9LFuOIujqKaPJUJK2Q', {
+                attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                maxZoom: 18,
+                id: 'mapbox/streets-v11',
+                tileSize: 512,
+                zoomOffset: -1,
+                accessToken: 'pk.eyJ1IjoiZGVhbjE5OTYiLCJhIjoiY2tsbDYyNzFqMm5idDJxcDd5cjY2bTAwdSJ9.n2dX9LFuOIujqKaPJUJK2Q'
+            }).addTo(map);
+
+            let raw_data = '{{ latest_events|escapejs }}';
+            let data = JSON.parse(raw_data);
+
+            // Custom Icon
+            let hacoIcon = L.icon({
+                iconUrl: '{% static 'hacoweb/img/haco.svg' %}',
+                iconSize: [37,37],
+                iconAnchor: [15, 37],
+                popupAnchor: [0, -28]
             });
 
+            L.geoJSON(data, {
+                onEachFeature: function (feature, layer) {
+                    layer.bindPopup(
+                        "<p class='event-desc'>" + "Bright_ti4: " + feature.properties.Bright_ti4 + "</p>" +
+                        "<p class='event-desc'>" + "Scan: " + feature.properties.Scan + "</p>" +
+                        "<p class='event-desc'>" + "Track: " + feature.properties.Track + "</p>" +
+                        "<p class='event-desc'>" + "Date Acquired: " + feature.properties.Acq_date + "</p>" +
+                        "<p class='event-desc'>" + "Time Acquired: " + feature.properties.Acq_time + "</p>" +
+                        "<p class='event-desc'>" + "Satellite: " + feature.properties.Satellite + "</p>" +
+                        "<p class='event-desc'>" + "Confidence: " + feature.properties.Confidence + "</p>" +
+                        "<p class='event-desc'>" + "Version: " + feature.properties.Version + "</p>" +
+                        "<p class='event-desc'>" + "Bright_ti5: " + feature.properties.Bright_ti5 + "</p>" +
+                        "<p class='event-desc'>" + "Frp: " + feature.properties.Frp + "</p>" +
+                        "<p class='event-desc'>" + "Daynight: " + feature.properties.Daynight + "</p>" +
+                        "<p class='event-desc'>" + "Resolution: " + feature.properties.Resolution + "</p>"
+                    );
+                },
+                pointToLayer: function(feature, latlng) {
+                    return L.marker(latlng, {icon: hacoIcon});
+                }
+            }).addTo(map);
+
         </script>
+
+
     {% endblock %}
 </body>

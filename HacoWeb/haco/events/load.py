@@ -32,7 +32,8 @@ def load_data(hard, mode):
                 bright_ti5=record[10],
                 frp=record[11],
                 daynight=record[12],
-                resolution=mode
+                resolution=mode,
+                is_user_made="n"
             )
             if not hard:
                 chk_insert = pre_db_process_data(event)  # Check the record for duplication

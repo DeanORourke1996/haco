@@ -19,8 +19,6 @@ from django.urls import path
 from users import views as users
 from hacoweb import views as hacoweb
 from users import views as user_views
-from events import views as event_views
-from django.views.generic import TemplateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -30,5 +28,6 @@ urlpatterns = [
     path('about/', hacoweb.glossary, name='glossary'),
     path('', hacoweb.home, name='home'),
     path('home/', hacoweb.home, name='home'),
+    path('report/', hacoweb.report, name='report')
     #url(r'^event/(?P<pk>[0-9]+)$', )
 ]
