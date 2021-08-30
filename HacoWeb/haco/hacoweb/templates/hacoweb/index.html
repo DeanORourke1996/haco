@@ -10,15 +10,35 @@
     {% block content %}
 
         <!-- Wind Compass -->
-        <div class="wind-meter col-lg-12">
-            <h3>Weather Information</h3>
-            <i id="wind_indicator" class="fa fa-angle-double-up"></i>
-            <span class="weather-info">
-                <p id="dynamic"></p>
-                <p id="speed"></p>
-                <p id="temp"></p>
-                <small id="time"></small>
-            </span>
+        <div class="wind-meter container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <h3>Weather Information</h3>
+                    <p id="fetch_weather">Fetching weather...</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <span class="weather-info">
+                        <p id="dynamic"></p>
+                        <p id="speed"></p>
+                        <p id="temp"></p>
+                        <small id="time"></small>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="alert-box container-fluid">
+            <div class="row">
+                <div class="col-sm-6 col-lg-6">
+                    <h2 style="color: #b6e0e2;" id="humidity">Checking location...</h2>
+                    <p id="humid_desc"></p>
+                </div>
+                <div class="col-sm-6 col-lg-offset-6">
+                    <i id="wind_indicator" class="fa fa-angle-double-up"></i>
+                </div>
+            </div>
         </div>
 
 
@@ -43,12 +63,12 @@
                 $.get(url)
                 .done(function(data){
                     console.log(data);
-                    initCompass(data.wind.deg, data.wind.speed, data.main.temp);
+                    //initCompass(data.wind.deg, data.wind.speed, data.main.temp);
                 });
             }
 
             // Configures the Compass Element with Wind and Weather Information
-            function initCompass(degrees, speed, temp) {
+            function initCompass(degrees, speed, temp, humid) {
                 // Rotates the Wind Arrow according to Degrees passed to function
                 $('#wind_indicator').css({transform: 'rotate('+degrees+'deg)', '-moz-transform:': 'rotate('+degrees+'deg)', '-webkit-transform': 'rotate('+degrees+'deg)'});
 
@@ -56,6 +76,46 @@
                 let celsius = (temp - 273.15).toFixed(1);
                 let d = new Date();
                 let direction;
+                let alertOverview;
+                let alertDetail;
+                // Element Variables
+                let elInfo = $('#dynamic');
+                let elSpeed = $('#speed');
+                let elTemp = $('#temp');
+                let elTime = $('#time');
+                let elHumid = $('#humidity');
+                let elHumidDesc = $('#humid_desc');
+                let elWeather = $('#fetch_weather');
+
+                elWeather.text('Fetching weather...');
+
+                let h = 50;
+
+                // Check relative humidity
+                // Give some dynamic feedback to the user based on their relative environment
+                if(h > 75) {
+                    alertOverview = `Humidity is high @ ${h}%`;
+                    elHumid.css('color', 'lightgreen');
+                    alertDetail = "When humidity is high the air is moist. This creates more difficult conditions for wildfire to spread";
+                } else if(h > 40 && h <= 75){
+                    alertOverview = `Moderate humidity @ ${h}%`;
+                    elHumid.css('color', '#edae49');
+                    if(speed > 8 && celsius > 23){
+                        alertDetail = "Wildfire has potential to spread as wind speeds and temperatures are high";
+                    } else {
+                        alertDetail = "Generally good conditions. Wind speed remains low and temperature is mild"
+                    }
+                }
+                else if(h <= 40) {
+                    alertOverview = `Low humidity @ ${h}%`;
+
+                    if(speed > 8 && celsius > 23){
+                        alertDetail = "Potentially dangerous conditions. Air is dry and arid with wind speed and temperatures high";
+                    } else {
+                        alertDetail = "Air is dry which can create an environment for wildfire to start or spread"
+                    }
+
+                }
 
                 // Conditional for descriptive text direction
                 if(degrees > 0 && degrees <=45) {
@@ -76,17 +136,14 @@
                     direction = 'to the North';
                 }
 
-                // Remove Old Info
-                let elInfo = $('#dynamic');
-                let elSpeed = $('#speed');
-                let elTemp = $('#temp');
-                let elTime = $('#time');
-
                 // Check for values
-                if(elInfo.val() && elSpeed.val() && elTemp.val()){
+                if(elInfo.val() || elSpeed.val() || elTemp.val() || elHumid.val() || elHumidDesc.val() || elWeather.val()){
                     elInfo.fadeOut();
                     elSpeed.fadeOut();
                     elTemp.fadeOut();
+                    elHumid.fadeOut();
+                    elHumidDesc.fadeOut();
+                    elWeather.fadeOut();
                 }
 
                 // Redefine Element's Value
@@ -94,11 +151,15 @@
                 elSpeed.text('Wind Speed: '+ speed + 'kts');
                 elTemp.text('Temperature: '+ celsius +' degrees (C)');
                 elTime.text('Last updated at: '+ d.toLocaleTimeString());
+                elWeather.text(''); // blank it
+                elHumid.html(alertOverview);
+                elHumidDesc.text(alertDetail);
 
                 // Display new Information
                 elInfo.fadeIn();
                 elSpeed.fadeIn();
                 elTemp.fadeIn();
+                elHumid.fadeIn();
             };
 
 
@@ -125,6 +186,8 @@
                 .on('dragend', () => {
                     marker.unbindPopup();
                     latlng = marker.getLatLng();
+                    e.latitude = latlng.lat;
+                    e.longitude = latlng.lon;
                     marker.bindPopup('Lat: ' + latlng.lat.toFixed(6) + ', Lon: ' + latlng.lng.toFixed(6));
                     marker.openPopup();
                     circle.remove();
@@ -132,7 +195,7 @@
                     // Weather API When Location is Changed...Update Weather
                     OSMWeatherFetch(latlng.lat, latlng.lng).then(data => {
                         // Update weather as per location
-                        initCompass(data.wind.deg, data.wind.speed, data.main.temp);
+                        initCompass(data.wind.deg, data.wind.speed, data.main.temp, data.main.humidity);
                     }).catch(err => {
                         console.log('Error connecting to data host: ', err);
                     });
@@ -155,7 +218,12 @@
                 marker.openPopup();
 
                 // Initial Promise to Retrieve Data for Weather
+                OSMWeatherFetch(e.latitude, e.longitude)
+                    .then(data => initCompass(data.wind.deg, data.wind.speed, data.main.temp, data.main.humidity))
+                    .catch(err => console.log("Error connecting to data host: ", err));
 
+                // Uncomment this to test the return data
+                // OSMWeatherAPI('https://api.openweathermap.org/data/2.5/weather?lat='+e.latitude+'&lon='+e.longitude+'&appid='+OSMAPIKey);
 
                 // Interval on Callback Function to Retrieve Updated Weather Information
                 setInterval(function() {
