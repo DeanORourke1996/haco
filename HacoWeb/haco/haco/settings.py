@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'hacoweb.apps.HacowebConfig',
     'users',
     'events',
-    'crispy_forms'
+    'crispy_forms',
+    'kronos'
 ]
 
 MIDDLEWARE = [
