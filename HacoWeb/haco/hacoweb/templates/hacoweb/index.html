@@ -31,19 +31,19 @@
 
         <div class="alert-box container-fluid">
             <div class="row">
-                <div class="col-sm-6 col-lg-6">
+                <div class="col-sm-6 col-lg-10">
                     <h2 style="color: #b6e0e2;" id="humidity">Checking location...</h2>
                     <p id="humid_desc"></p>
                 </div>
-                <div class="col-sm-6 col-lg-offset-6">
-                    <i id="wind_indicator" class="fa fa-angle-double-up"></i>
+                <div class="col-sm-6 col-lg-2">
+                    <i style="display: none;" id="wind_indicator" class="fa fa-angle-double-up"></i>
                 </div>
             </div>
         </div>
 
 
         <!-- Map Container -->
-        <div id="init_map">
+        <div id="init_map" class="map">
         </div>
 
         <script type="text/javascript">
@@ -86,6 +86,7 @@
                 let elHumid = $('#humidity');
                 let elHumidDesc = $('#humid_desc');
                 let elWeather = $('#fetch_weather');
+                let elWindCompass = $('#wind_indicator');
 
                 elWeather.text('Fetching weather...');
 
@@ -143,7 +144,6 @@
                     elTemp.fadeOut();
                     elHumid.fadeOut();
                     elHumidDesc.fadeOut();
-                    elWeather.fadeOut();
                 }
 
                 // Redefine Element's Value
@@ -160,6 +160,8 @@
                 elSpeed.fadeIn();
                 elTemp.fadeIn();
                 elHumid.fadeIn();
+                elWeather.fadeIn();
+                elWindCompass.fadeIn();
             };
 
 

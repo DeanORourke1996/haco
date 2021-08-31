@@ -36,14 +36,18 @@ def home(response):
 def report(response):
     # Grab the user from the response
     user = response.user
+
+    return render(response, 'hacoweb/report_tool.html')
+
     # Check if it's authenticated
-    if user.is_authenticated:
-        return render(response, 'hacoweb/report_tool.html')  # let them through if authenticated
-    else:
-        base_url = reverse('register')  # else build a response header and post it in the redirect
-        query = urlencode({'auth': 'noauth'})
-        url = '{}?{}'.format(base_url, query)
-        return redirect(url, permanent=False)
+
+    # if user.is_authenticated:
+    #     return render(response, 'hacoweb/report_tool.html')  # let them through if authenticated
+    # else:
+    #     base_url = reverse('register')  # else build a response header and post it in the redirect
+    #     query = urlencode({'auth': 'noauth'})
+    #     url = '{}?{}'.format(base_url, query)
+    #     return redirect(url, permanent=False)
 
 
 def glossary(response):

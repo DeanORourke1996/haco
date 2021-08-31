@@ -7,15 +7,131 @@
 
 <body>
     {% block content %}
+
+        <div class="report-instructions container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <p>Change the location by moving the marker around below on the map. If the fire is some distance away,
+                    you can estimate where you should place the marker and submit!</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="report-form container-fluid">
+            <div class="row">
+                <div class="col-lg-3">
+                    <label>Latitude</label>
+                    <input type="text" id="latitude" class="form-control" placeholder="Latitude" aria-label="Latitude">
+                </div>
+                <div class="col-lg-3">
+                    <label>Latitude</label>
+                    <input type="text" id="longitude" class="form-control" placeholder="Longitude" aria-label="Longitude">
+                </div>
+                <div class="col-lg-3">
+                    <label>Fire Severity</label>
+                    <select class="form-select" aria-label="Severity">
+                        <option selected>Severity of Fire</option>
+                        <option value="severe">Severe (Fire is Out of Control)</option>
+                        <option value="moderate">Moderate (Fire is Growing)</option>
+                        <option value="light">Small (Fire is Small and isn't spreading)</option>
+                    </select>
+                </div>
+                <div class="col-lg-3">
+                    <button class="btn submit-report" type="button">Submit</button>
+                </div>
+            </div>
+        </div>
+
+
         <!-- Wrapper Element for Map -->
-        <div id="report_map">
+        <div id="report_map" class="map">
         </div>
 
-        <!-- Use Modal for Reporting Events -->
-        <div class="modal-body">
 
-        </div>
+        <!-- Script for Report Mapping Tool -->
+        <script type="text/javascript">
 
+            // Set for Inputs with Captured Location
+            function setFormLocation(lat,lng){
+                // Element Variables
+                let elLat = $('#latitude');
+                let elLng = $('#longitude');
+                // Set Values
+                elLat.val(lat.toFixed(3));
+                elLng.val(lng.toFixed(3));
+                // Disable Fields
+                elLat.prop({'disabled': true, 'readonly': true});
+                elLng.prop({'disabled': true, 'readonly': true});
+            }
+
+            let latlng; // used to update coordinates as they change
+            let markers = []; // will store markers
+
+            // init map
+            let map = L.map('report_map', {
+                zoom: 13,
+                dragging: !L.Browser.mobile,
+                tap: !L.Browser.mobile,
+                canvas: L.canvas()
+            })
+            .locate({setView: true, setZoom: 300})
+            .on('locationfound', (e)=> {
+                let marker = L.marker([e.latitude, e.longitude], {
+                    maxZoom: 18,
+                    tileSize: 512,
+                    zoomOffset: -1,
+                    draggable: true,
+                    autoPan: true
+                })
+                // after the marker has been dropped, regather coordinates pass them out to global var
+                .on('dragend', () => {
+                    marker.unbindPopup();
+                    latlng = marker.getLatLng();
+                    e.latitude = latlng.lat;
+                    e.longitude = latlng.lng;
+                    marker.bindPopup('Lat: ' + latlng.lat.toFixed(6) + ', Lon: ' + latlng.lng.toFixed(6));
+                    marker.openPopup();
+                    circle.remove();
+                    // Call on Every Marker Drag
+                    setFormLocation(e.latitude, e.longitude);
+                })
+                // Binds new popup when dragend
+                .bindPopup('Lat: ' + e.latitude + ', Lon: ' + e.longitude)
+
+                // Create circle on init around user location
+                let circle = L.circle([e.latitude, e.longitude], e.accuracy / 2, {
+                    weight: 1,
+                    color: '#b6e0e2',
+                    fillColor: '#CACACA',
+                    fillOpacity: 0.2
+                })
+
+                // Add the marker/circle to the map
+                map.addLayer(marker);
+                map.addLayer(circle);
+                // Open the popup
+                marker.openPopup();
+
+                // Set Location and Form Elements
+                setFormLocation(e.latitude, e.longitude);
+
+                //initCompass(53, 3.6, 276.4);
+
+            })
+            // Usually permission is revoked if this is caused...
+            .on('locationerror', (e) => {
+                console.log('Location permission revoked: ' + (e));
+            })
+
+            L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZGVhbjE5OTYiLCJhIjoiY2tsbDV6bGNxM2o4MDJuczhmdDR1dXhsYiJ9.gCVu5rbiMqcO1LKdVbWidg', {
+                attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                maxZoom: 18,
+                id: 'mapbox/streets-v11',
+                tileSize: 512,
+                zoomOffset: -1,
+                accessToken: 'pk.eyJ1IjoiZGVhbjE5OTYiLCJhIjoiY2tsbDV6bGNxM2o4MDJuczhmdDR1dXhsYiJ9.gCVu5rbiMqcO1LKdVbWidg'
+            }).addTo(map);
+        </script>
 
     {% endblock %}
 </body>
