@@ -28,6 +28,7 @@ urlpatterns = [
     path('about/', hacoweb.glossary, name='glossary'),
     path('', hacoweb.home, name='home'),
     path('home/', hacoweb.home, name='home'),
-    path('report/', hacoweb.report, name='report')
+    path('report/', hacoweb.report, name='report'),
+    path('report/send_data', hacoweb.sendreport, name='sendreport')
     #url(r'^event/(?P<pk>[0-9]+)$', )
 ]

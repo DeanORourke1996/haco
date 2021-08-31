@@ -32,6 +32,14 @@ def home(response):
     return render(response, 'hacoweb/index.html', context)
 
 
+# Send data to the report for storing in the database
+def sendreport(response):
+    if response.user.is_authenticated:
+        if response.method == "POST":
+            if 'reportIncident' in response.POST:
+                report_incident = response.POST['reportIncident']
+
+
 # Report view
 def report(response):
     # Grab the user from the response
@@ -44,7 +52,7 @@ def report(response):
     # if user.is_authenticated:
     #     return render(response, 'hacoweb/report_tool.html')  # let them through if authenticated
     # else:
-    #     base_url = reverse('register')  # else build a response header and post it in the redirect
+    #     base_url = reverse('login')  # else build a response header and post it in the redirect
     #     query = urlencode({'auth': 'noauth'})
     #     url = '{}?{}'.format(base_url, query)
     #     return redirect(url, permanent=False)

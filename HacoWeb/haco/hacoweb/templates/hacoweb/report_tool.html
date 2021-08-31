@@ -18,30 +18,33 @@
         </div>
 
         <div class="report-form container-fluid">
-            <div class="row">
-                <div class="col-lg-3">
+            <div class="row justify-content-center">
+                <div class="col-sm-12 col-lg-3">
                     <label>Latitude</label>
                     <input type="text" id="latitude" class="form-control" placeholder="Latitude" aria-label="Latitude">
                 </div>
-                <div class="col-lg-3">
+                <div class="col-sm-12 col-lg-3">
                     <label>Latitude</label>
                     <input type="text" id="longitude" class="form-control" placeholder="Longitude" aria-label="Longitude">
                 </div>
-                <div class="col-lg-3">
+                <div class="col-sm-12 col-lg-3">
                     <label>Fire Severity</label>
-                    <select class="form-select" aria-label="Severity">
-                        <option selected>Severity of Fire</option>
+                    <select id="severity" class="form-select" aria-label="Severity">
+                        <option value="null" selected>Choose an Option</option>
                         <option value="severe">Severe (Fire is Out of Control)</option>
                         <option value="moderate">Moderate (Fire is Growing)</option>
                         <option value="light">Small (Fire is Small and isn't spreading)</option>
                     </select>
                 </div>
-                <div class="col-lg-3">
-                    <button class="btn submit-report" type="button">Submit</button>
+                <div class="col-sm-12 col-lg-3">
+                    <button id="submit_report" class="btn submit-report" type="button">Submit</button>
                 </div>
             </div>
         </div>
 
+        <!-- Error Checking -->
+        <p class="submit-errors" id="submit_error_coord">Ensure that the marker has been set on a location before submitting. Browser location settings may affect this</p>
+        <p class="submit-errors" id="submit_error_nullity">Ensure that all fields have been filled out before submitting</p>
 
         <!-- Wrapper Element for Map -->
         <div id="report_map" class="map">
@@ -50,6 +53,42 @@
 
         <!-- Script for Report Mapping Tool -->
         <script type="text/javascript">
+
+            $(document).ready(function() {
+                // Submit Button Element
+                let elSubmit = document.getElementById('submit_report');
+
+                // Event listener on Submit Button
+                elSubmit.addEventListener('click', function () {
+                    // Disable this button
+                    // elSubmit.disabled = true;
+                    // Check everything being sent
+                    let latitude = document.getElementById('latitude').value;
+                    let longitude = document.getElementById('longitude').value;
+                    let severity = document.getElementById('severity').value;
+
+                    console.log(latitude);
+                    console.log(longitude);
+                    console.log(severity);
+
+                    // Check for nullity
+                    if (!latitude || !longitude) {
+                        document.getElementById('submit_error_coord').style.display = "block";
+
+                    } else if(severity === "null") {
+                        document.getElementById('submit_error_nullity').style.display = "block";
+                    } else { // hide them otherwise
+                        document.getElementById('submit_error_coord').style.display = "none";
+                        document.getElementById('submit_error_nullity').style.display = "none";
+                    }
+
+
+
+                });
+            });
+
+            // Send data to server via POST after submission
+            //function sendData()
 
             // Set for Inputs with Captured Location
             function setFormLocation(lat,lng){

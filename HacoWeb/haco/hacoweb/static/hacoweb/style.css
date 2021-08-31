@@ -14,32 +14,33 @@
     ****************************************************************
  */
 
+/*
+    Set Global Website Font
+ */
 * {
     font-family: 'Oswald', sans-serif;
 }
 
+/*
+    Set the Global Font Size for Utilizing REMs
+ */
 html {
     font-size: 16px;
 }
 
+/*
+    Set Website Background Colour
+ */
 body {
     background-color: #b6e0e2;
 }
 
+/*
+    Remove Text-Decoration for All Links
+ */
 a, a:hover{
     text-decoration: none;
     color: inherit;
-}
-
-.haco-nav a {
-    padding: 1rem;
-    border-right: 0.15pc solid #edae49;
-    color: #edae49;
-}
-
-.haco-nav a:hover {
-    text-decoration: none;
-    color: #EF233C;
 }
 
 /*
@@ -264,21 +265,15 @@ a, a:hover{
     }
 
     /*
-        Add margins on the Report page
+        Add margins on the Report page, increase font size
      */
     .report-form {
-        margin: 50px 20px;
+        font-size: 1.5rem;
+        margin: 50px auto;
     }
 
-    /*
-        Change Bootstrap properties on Report page around the button
-        Add margin
-     */
-    .submit-report {
-        overflow-x: hidden;
-        margin-top: 10px;
-        color: #2B2D42 !important;
-        background-color: #edae49 !important;
+    .report-form label {
+        margin-left: 50px;
     }
 
     /*
@@ -288,6 +283,26 @@ a, a:hover{
     .report-form select {
         width: 40%;
         height: auto;
+        margin: 0 auto;
+    }
+
+    /*
+        Change Bootstrap button properties, add margin
+     */
+    .submit-report {
+        margin-top: 10px;
+        color: #2B2D42 !important;
+        background-color: #edae49 !important;
+    }
+
+    /*
+        Error paragraphs handled by JS
+     */
+    .submit-errors {
+        display: none;
+        color: #EF233C;
+        margin: 20px;
+        font-weight: 700;
     }
 
     .report-instructions {
@@ -302,7 +317,7 @@ a, a:hover{
 /*
     ---------------------------------------------------------------
     ---------------------------------------------------------------
-    ------------ LARGE SCREENS/WEBSITE STYLING SECTION -----------
+    ------------ LARGE SCREENS/WEBSITE STYLING SECTION ------------
     ---------------------------------------------------------------
     ---------------------------------------------------------------
  */
@@ -343,6 +358,22 @@ a, a:hover{
         color: #edae49;
         font-size: 1.25rem;
         padding: 1rem;
+    }
+
+    /*
+        Style links in the nav bar
+     */
+    .haco-nav a {
+        padding: 1rem;
+        color: #edae49;
+    }
+
+    /*
+        Style hover event on links on the navbar
+     */
+    .haco-nav a:hover {
+        text-decoration: none;
+        color: #EF233C;
     }
 
     /*
