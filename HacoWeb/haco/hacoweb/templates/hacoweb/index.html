@@ -8,7 +8,10 @@
 <body>
     <!-- Main Body -->
     {% block content %}
-
+        <!-- Check for Messages -->
+        {% if messages %}
+            <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}" role="alert">{{ message }}</div>
+        {% endif %}
         <!-- Wind Compass -->
         <div class="wind-meter container-fluid">
             <div class="row">
@@ -90,6 +93,7 @@
 
                 elWeather.text('Fetching weather...');
 
+                // For testing
                 let h = 50;
 
                 // Check relative humidity
@@ -277,6 +281,7 @@
                         "<p class='event-desc'>" + "Frp: " + feature.properties.Frp + "</p>" +
                         "<p class='event-desc'>" + "Daynight: " + feature.properties.Daynight + "</p>" +
                         "<p class='event-desc'>" + "Resolution: " + feature.properties.Resolution + "</p>"
+                        if(feature.properties.is_user_made )
                     );
                 },
                 pointToLayer: function(feature, latlng) {

@@ -24,7 +24,7 @@ class Migration(migrations.Migration):
                 ('acq_date', models.CharField(max_length=255)),
                 ('acq_time', models.CharField(max_length=255)),
                 ('satellite', models.CharField(max_length=100)),
-                ('confidence', models.CharField(max_length=100)),
+                ('severity', models.CharField(max_length=100)),
                 ('version', models.CharField(max_length=100)),
                 ('bright_ti5', models.FloatField()),
                 ('frp', models.FloatField()),

@@ -1,20 +1,23 @@
-from django.shortcuts import render, redirect
-from django.urls import reverse
-from urllib.parse import urlencode
+from django.http import HttpResponse
+from django.db import DatabaseError
+from django.contrib import messages
+import json
+from django.shortcuts import render, redirect, reverse
 from django.db.models import Q
 from events.models import Event
 import datetime
 
 
 def home(response):
-    from json import dumps
     # Set expiry on session
     response.session.set_expiry(300)
 
     # Collects days events when gathered
     latest_events = Event.objects.filter(
         Q(confidence__contains='high') |
-        Q(confidence__contains='nominal'),
+        Q(confidence__contains='nominal') |
+        Q(confidence__contains='moderate') |
+        Q(confidence__contains='severe'),
         acq_date__contains=str(datetime.date.today())
     )
     # Create a list
@@ -25,7 +28,7 @@ def home(response):
         "features": event_list
     }
     # Serialize
-    event_json = dumps(event_dict)
+    event_json = json.dumps(event_dict)
     # Context variable
     context = {'latest_events': event_json}
 
@@ -34,10 +37,42 @@ def home(response):
 
 # Send data to the report for storing in the database
 def sendreport(response):
-    if response.user.is_authenticated:
-        if response.method == "POST":
-            if 'reportIncident' in response.POST:
-                report_incident = response.POST['reportIncident']
+    # Instantiate variables each call
+    lat = lng = severity = None
+
+    # Check method
+    if response.method == "POST":
+        # Check initial values being returned
+        if 'latitude' and 'longitude' and 'severity' and 'user_reported' in response.POST:
+            # Grab values from POST
+            lat = response.POST['latitude']
+            lng = response.POST['longitude']
+            severity = response.POST['severity']
+
+            try:
+                # Begin Database Pre-processing
+                e = Event.objects.get_or_create(
+                    lat=lat,  # latitude
+                    lon=lng,  # longitude
+                    confidence=severity,  # severity
+                    acq_date=datetime.date.today(),  # today datetime
+                    acq_time=datetime.datetime.now().time(),
+                    is_user_made='T'  # Is a user created entry
+                )
+                messages.success(response, "Incident was recorded. Thank you for your contribution")
+                r = {'status': 1, 'message': 'success'}
+                return HttpResponse(json.dumps(r), content_type='application/json')
+            except DatabaseError as dbe:
+                r = {'status': 0, 'message': 'failed on database'}
+                print("Error with database insertion: " + str(dbe))
+                return HttpResponse(json.dumps(r), content_type='application/json')
+
+        else:
+            r = {'status': 0, 'message': 'failed on value errors'}
+            return HttpResponse(json.dumps(r), content_type='application/json')
+    else:
+        r = {'status': 0, 'message': 'Inavlid request method'}
+        return HttpResponse(json.dumps(r), content_type='application/json')
 
 
 # Report view

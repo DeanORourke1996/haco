@@ -7,6 +7,8 @@
 
 <body>
     {% block content %}
+        <!-- Required to POST data -->
+        {% csrf_token %}
 
         <div class="report-instructions container-fluid">
             <div class="row">
@@ -37,7 +39,7 @@
                     </select>
                 </div>
                 <div class="col-sm-12 col-lg-3">
-                    <button id="submit_report" class="btn submit-report" type="button">Submit</button>
+                    <button id="submit_report" class="btn submit-report" type="submit">Submit</button>
                 </div>
             </div>
         </div>
@@ -53,6 +55,11 @@
 
         <!-- Script for Report Mapping Tool -->
         <script type="text/javascript">
+            // Set url
+            let URL = "{% url 'sendreport' %}";
+            // Const variable Cross-site request forgery token. Required by Django to POST data to Views
+            const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
 
             $(document).ready(function() {
                 // Submit Button Element
@@ -67,22 +74,49 @@
                     let longitude = document.getElementById('longitude').value;
                     let severity = document.getElementById('severity').value;
 
+                    // Testing, testing 1, 2
                     console.log(latitude);
                     console.log(longitude);
                     console.log(severity);
 
                     // Check for nullity
                     if (!latitude || !longitude) {
+                        // Error with Coord fields, will be related to location settings or marker
                         document.getElementById('submit_error_coord').style.display = "block";
-
                     } else if(severity === "null") {
+                        // Error with null values
                         document.getElementById('submit_error_nullity').style.display = "block";
-                    } else { // hide them otherwise
+                    } else {
+                        // hide them otherwise
                         document.getElementById('submit_error_coord').style.display = "none";
                         document.getElementById('submit_error_nullity').style.display = "none";
+
+                        // Build Incident Report
+                        let reportIncident = {
+                            "latitude": latitude,
+                            "longitude": longitude,
+                            "severity": severity,
+                            "user_reported": "{{ user.username }}"
+                        };
+
+                        // Build AJAX request
+                        $.ajax(URL, {
+                            type: 'POST',
+                            data: reportIncident,
+                            headers: {
+                                'X-CSRFToken': csrftoken
+                            },
+                            mode: 'same-origin',
+                            success: function(data){
+                                if(data.status === 1){
+                                    location.href = '/home';
+                                } else {
+                                    location.href = '/report';
+                                }
+                            }
+                        });
+
                     }
-
-
 
                 });
             });

@@ -103,12 +103,12 @@ def pre_db_process_data(event, *t):
     # Cast to floats for referential integrity
     lat = float(event[0].lat)
     lon = float(event[0].lon)
-    confidence = event[0].confidence
+    confidence = event[0].severity
     today = datetime.date.today()  # Todays date for comparing events in SQL
     d = datetime.timedelta(days=2)  # Change delta for n-days-ago
     ndays = today - d
 
-    # Event can be skipped immediately if event confidence is not high
+    # Event can be skipped immediately if event severity is not high
     if confidence.isnumeric() and int(confidence) < 70:
         return 0
     elif confidence != "high":
